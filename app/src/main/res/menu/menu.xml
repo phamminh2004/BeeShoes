@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="Trang chủ" />
+    <group android:checkableBehavior="single">
+    <item android:title="Quản lý">
+        <menu>
+            <item
+                android:id="@+id/bill"
+                android:icon="@drawable/ic_bill"
+                android:title="Quản lý hóa đơn" />
+            <item
+                android:id="@+id/shoeType"
+                android:icon="@drawable/ic_list"
+                android:title="Quản lý loại giày" />
+            <item
+                android:id="@+id/shoes"
+                android:icon="@drawable/ic_shoe"
+                android:title="Quản lý giày" />
+            <item
+                android:id="@+id/employee"
+                android:icon="@drawable/ic_employee"
+                android:title="Quản lý nhân viên" />
+            <item
+                android:id="@+id/work"
+                android:icon="@drawable/ic_work"
+                android:title="Quản lý công việc" />
+            <item
+                android:id="@+id/customer"
+                android:icon="@drawable/ic_customer"
+                android:title="Quản lý khách hàng" />
+        </menu>
+    </item>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="Thống kê">
+            <menu>
+                <item
+                    android:id="@+id/top"
+                    android:icon="@drawable/ic_top"
+                    android:title="Top 10 giày bán chạy nhất" />
+                <item
+                    android:id="@+id/revenue"
+                    android:icon="@drawable/ic_money"
+                    android:title="Doanh thu" />
+            </menu>
+        </item>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="Người dùng">
+            <menu>
+                <item
+                    android:id="@+id/add"
+                    android:icon="@drawable/ic_add"
+                    android:title="Tạo tài khoản nhân viên"
+                    android:visible="false"
+                   />
+                <item
+                    android:id="@+id/changePassword"
+                    android:icon="@drawable/ic_key"
+                    android:title="Đổi mật khẩu" />
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Đăng xuất" />
+            </menu>
+        </item>
+    </group>
+</menu>

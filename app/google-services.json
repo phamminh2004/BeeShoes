@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134988160029",
+    "project_id": "beeshoes-20907",
+    "storage_bucket": "beeshoes-20907.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134988160029:android:bc4529f064eb882e067af4",
+        "android_client_info": {
+          "package_name": "fpoly.mds.beeshoes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqIP_uqHEQfGkvBbpvOKdL2MnZKZveSVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
