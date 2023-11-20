@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.add) {
             setTitle("Thêm tài khoản");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddAccountFragment()).commit();
+        } else if (item.getItemId()==R.id.home) {
+            setTitle("Trang chủ");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
         }
         drawer.close();
         return false;
