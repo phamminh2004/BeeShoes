@@ -120,7 +120,6 @@
             android:background="@drawable/custom_button"
             android:text="Đăng nhập"
             app:backgroundTint="@null" />
-
     </LinearLayout>
 
     <View
