@@ -19,6 +19,7 @@ import fpoly.mds.beeshoes.fragment.AddAccountFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
+import fpoly.mds.beeshoes.fragment.ShoesFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId()==R.id.shoeType) {
             setTitle("Loại giày");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
+        }else if(item.getItemId()==R.id.shoes){
+            setTitle("Giày");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
         }
         drawer.close();
         return false;

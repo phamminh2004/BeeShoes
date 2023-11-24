@@ -18,32 +18,35 @@ import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.DialogFunctionBinding;
-import fpoly.mds.beeshoes.databinding.ItemShoeTypeBinding;
-import fpoly.mds.beeshoes.model.ShoeType;
+import fpoly.mds.beeshoes.databinding.ItemShoesBinding;
+import fpoly.mds.beeshoes.model.Shoe;
 
-public class ShoeTypeAdapter extends RecyclerView.Adapter<ShoeTypeAdapter.ViewHolder> {
+public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<ShoeType> list;
+    private final ArrayList<Shoe> list;
     private final functionInterface functionInterface;
 
-    public ShoeTypeAdapter(Context context, ArrayList<ShoeType> list, functionInterface functionInterface) {
+    public ShoesAdapter(Context context, ArrayList<Shoe> list, functionInterface functionInterface) {
         this.context = context;
         this.list = list;
         this.functionInterface = functionInterface;
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemShoeTypeBinding binding = ItemShoeTypeBinding.inflate(LayoutInflater.from(context), parent, false);
+        ItemShoesBinding binding = ItemShoesBinding.inflate(LayoutInflater.from(context), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ShoeType item = list.get(position);
+        Shoe item = list.get(position);
         holder.binding.tvName.setText(item.getName());
+        holder.binding.tvPrice.setText("Giá: " + item.getPrice());
+        holder.binding.tvShoeType.setText("Hãng: " + item.getShoeType());
+        holder.binding.tvColor.setText("Màu sắc: " + item.getColor());
+        holder.binding.tvSize.setText("Size: " + item.getSize());
         String img = item.getImg();
         try {
             Picasso.get().load(img).placeholder(R.drawable.ic_shoe).error(R.drawable.ic_camera)
@@ -60,7 +63,6 @@ public class ShoeTypeAdapter extends RecyclerView.Adapter<ShoeTypeAdapter.ViewHo
     public int getItemCount() {
         return list.size();
     }
-
     private void openDialogChucNang(String id) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         DialogFunctionBinding binding = DialogFunctionBinding.inflate(inflater);
@@ -90,11 +92,10 @@ public class ShoeTypeAdapter extends RecyclerView.Adapter<ShoeTypeAdapter.ViewHo
 
         void delete(String id);
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemShoeTypeBinding binding;
+        ItemShoesBinding binding;
 
-        public ViewHolder(@NonNull ItemShoeTypeBinding binding) {
+        public ViewHolder(@NonNull ItemShoesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

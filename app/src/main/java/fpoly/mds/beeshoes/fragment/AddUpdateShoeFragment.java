@@ -33,17 +33,20 @@ import com.squareup.picasso.Picasso;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.databinding.FragmentUpdateShoeTypeBinding;
-import fpoly.mds.beeshoes.model.ShoeType;
+import fpoly.mds.beeshoes.databinding.FragmentAddUpdateShoeBinding;
+import fpoly.mds.beeshoes.model.Shoe;
 
-public class UpdateShoeTypeFragment extends Fragment {
-    FragmentUpdateShoeTypeBinding binding;
+
+public class AddUpdateShoeFragment extends Fragment {
+    private final String REGEX_INT = "^\\d+$";
+    FragmentAddUpdateShoeBinding binding;
     FirebaseFirestore db;
     FirebaseStorage storage;
-    String id;
-    String name;
+    Bundle bundle;
+    String id, name, color, strPrice, strSize, shoeType;
     private Uri img_uri;
     private final ActivityResultLauncher<Intent> cameraActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -53,7 +56,7 @@ public class UpdateShoeTypeFragment extends Fragment {
                 try {
                     Picasso.get().load(img_uri).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
                 } catch (Exception e) {
-                    Log.d("TAG", "onActivityResult: Không thể load ảnh " + e.getMessage());
+                    Log.e("TAG", "onActivityResult: Không thể load ảnh " + e.getMessage());
                 }
             }
         }
@@ -67,7 +70,7 @@ public class UpdateShoeTypeFragment extends Fragment {
                 try {
                     Picasso.get().load(img_uri).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
                 } catch (Exception e) {
-                    Log.d("TAG", "onActivityResult: Không thể load ảnh " + e.getMessage());
+                    Log.e("TAG", "onActivityResult: Không thể load ảnh " + e.getMessage());
                 }
             }
         }
@@ -76,29 +79,42 @@ public class UpdateShoeTypeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentUpdateShoeTypeBinding.inflate(inflater, container, false);
+        binding = FragmentAddUpdateShoeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
-        Bundle bundle = getArguments();
-        id = bundle.getString("id");
-        getID(id, new ShoeTypeCallback() {
-            @Override
-            public void onShoeTypeLoaded(ShoeType shoeType) {
-                binding.edtName.setText(shoeType.getName());
-                Picasso.get().load(shoeType.getImg()).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-            }
-        });
+        bundle = getArguments();
         binding.cardPickerCamera.setOnClickListener(v -> {
             showDialogPick();
         });
+        if (bundle != null) {
+            id = bundle.getString("id");
+            getID(id, new ShoeCallback() {
+                @Override
+                public void onShoeLoaded(Shoe shoe) {
+                    binding.edtName.setText(shoe.getName());
+                    binding.edtShoeType.setText(shoe.getShoeType());
+                    binding.edtPrice.setText(shoe.getPrice() + "");
+                    binding.edtSize.setText(shoe.getSize() + "");
+                    binding.edtColor.setText(shoe.getColor());
+                    Picasso.get().load(shoe.getImg()).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        }
         binding.btnSave.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(binding.edtName.getText().toString().trim())) {
-                binding.edtName.setError("Nhập loại giày");
-                binding.edtName.requestFocus();
+            name = binding.edtName.getText().toString().trim();
+            color = binding.edtColor.getText().toString().trim();
+            shoeType = binding.edtShoeType.getText().toString().trim();
+            strPrice = binding.edtPrice.getText().toString().trim();
+            strSize = binding.edtSize.getText().toString().trim();
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(color) || TextUtils.isEmpty(shoeType) || TextUtils.isEmpty(strPrice) || TextUtils.isEmpty(strSize)) {
+                Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+            } else if (!strPrice.matches(REGEX_INT) || !strSize.matches(REGEX_INT)) {
+                Toast.makeText(getContext(), "Giá và size là số tự nhiên", Toast.LENGTH_SHORT).show();
             } else {
                 saveData();
             }
@@ -113,15 +129,15 @@ public class UpdateShoeTypeFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    pickCameraFuntion();
+                    pickCameraFunction();
                 } else if (i == 1) {
-                    pickGalleryFuntion();
+                    pickGalleryFunction();
                 }
             }
         }).show();
     }
 
-    private void pickCameraFuntion() {
+    private void pickCameraFunction() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Images.Media.TITLE, "Máy ảnh");
         img_uri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -130,23 +146,31 @@ public class UpdateShoeTypeFragment extends Fragment {
         cameraActivityResult.launch(intent);
     }
 
-    private void pickGalleryFuntion() {
+    private void pickGalleryFunction() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         galleryActivityResult.launch(intent);
     }
 
     private void saveData() {
-        name = binding.edtName.getText().toString();
-        if (img_uri != null) {
-            uploadImageAndSaveData();
+        if (bundle == null) {
+            if (img_uri == null) {
+                Toast.makeText(getContext(), "Bạn chưa chọn ảnh", Toast.LENGTH_SHORT).show();
+            } else {
+                id = UUID.randomUUID().toString();
+                uploadImageAndSaveData();
+            }
         } else {
-            updateDataWithoutImage();
+            if (img_uri != null) {
+                uploadImageAndSaveData();
+            } else {
+                updateDataWithoutImage();
+            }
         }
     }
 
     private void uploadImageAndSaveData() {
-        StorageReference imageRef = FirebaseStorage.getInstance().getReference("shoeType/" + id);
+        StorageReference imageRef = FirebaseStorage.getInstance().getReference("shoes/" + id);
         imageRef.putFile(img_uri)
                 .addOnSuccessListener(taskSnapshot -> {
                     imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
@@ -162,34 +186,38 @@ public class UpdateShoeTypeFragment extends Fragment {
     private void updateDataWithoutImage() {
         HashMap<String, Object> updateData = new HashMap<>();
         updateData.put("name", name);
-        db.collection("ShoeType").document(id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+        updateData.put("shoeType", shoeType);
+        updateData.put("price", Integer.parseInt(strPrice));
+        updateData.put("color", color);
+        updateData.put("size", Integer.parseInt(strSize));
+        db.collection("Shoes").document(id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
             }
         });
     }
 
     private void updateFirestoreData(String imgUrl) {
-        HashMap<String, Object> hashMap = new ShoeType(id, imgUrl, name).convertHashMap();
-        db.collection("ShoeType").document(id).update(hashMap)
+        HashMap<String, Object> hashMap = new Shoe(id, imgUrl, name, shoeType, Integer.parseInt(strPrice), color, Integer.parseInt(strSize)).convertHashMap();
+        db.collection("Shoes").document(id).set(hashMap)
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
                 });
     }
 
-    public void getID(String id, ShoeTypeCallback callback) {
-        DocumentReference docRef = db.collection("ShoeType").document(id);
+    private void getID(String id, AddUpdateShoeFragment.ShoeCallback callback) {
+        DocumentReference docRef = db.collection("Shoes").document(id);
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            ShoeType shoeType = documentSnapshot.toObject(ShoeType.class);
-                            if (shoeType != null) {
-                                callback.onShoeTypeLoaded(shoeType);
+                            Shoe shoe = documentSnapshot.toObject(Shoe.class);
+                            if (shoe != null) {
+                                callback.onShoeLoaded(shoe);
                             } else {
                                 Log.d("Firebase", "Không thể chuyển đổi thành đối tượng ShoeType");
                             }
@@ -206,9 +234,12 @@ public class UpdateShoeTypeFragment extends Fragment {
                 });
     }
 
-    public interface ShoeTypeCallback {
-        void onShoeTypeLoaded(ShoeType shoeType);
+    private interface ShoeCallback {
+        void onShoeLoaded(Shoe shoe);
 
         void onFailure(Exception e);
     }
+
 }
+
+

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".fragment.ShoeTypeFragment">
+    tools:context=".fragment.ShoesFragment">
 
     <EditText
         android:id="@+id/edt_search"
@@ -13,7 +13,7 @@
         android:background="@drawable/custom_edt"
         android:drawableEnd="@drawable/ic_search"
         android:drawablePadding="15dp"
-        android:hint="Tìm kiêm loại giày"
+        android:hint="Tìm kiêm giày"
         android:padding="15dp" />
 
     <LinearLayout
@@ -27,12 +27,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="DANH SÁCH LOẠI GIÀY"
+            android:text="DANH SÁCH GIÀY"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_shoeType"
+            android:id="@+id/rv_shoes"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -2,6 +2,8 @@ package fpoly.mds.beeshoes.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,34 +27,65 @@ import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.adapter.ShoeTypeAdapter;
+import fpoly.mds.beeshoes.adapter.ShoesAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentShoeTypeBinding;
+import fpoly.mds.beeshoes.model.Shoe;
 import fpoly.mds.beeshoes.model.ShoeType;
 
-public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.funcionInterface {
+public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.functionInterface {
 
     FragmentShoeTypeBinding binding;
     FirebaseFirestore db;
     ShoeTypeAdapter adapter;
     ArrayList<ShoeType> list = new ArrayList<>();
-    private ShoeTypeAdapter.funcionInterface funcionInterface;
+    private ShoeTypeAdapter.functionInterface functionInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentShoeTypeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
-        funcionInterface = this;
+        functionInterface = this;
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvShoeType.setLayoutManager(manager);
         loadData();
         binding.btnAdd.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddShoeTypeFragment()).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddUpdateShoeTypeFragment()).addToBackStack(null).commit();
+        });
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<ShoeType> templist = new ArrayList<>();
+                try {
+                    if (s.toString().trim() != "") {
+                        for (ShoeType shoeType : list) {
+                            if (String.valueOf(shoeType.getName()).contains(String.valueOf(s))) {
+                                templist.add(shoeType);
+                            }
+                        }
+                        adapter = new ShoeTypeAdapter(getContext(), templist, functionInterface);
+                        binding.rvShoeType.setAdapter(adapter);
+                    }
+                } catch (Exception e) {
+                    Log.e("TAG", "Lỗi tìm kiếm" + e.getMessage());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
         return binding.getRoot();
     }
 
-    public ArrayList<ShoeType> getAllList() {
+    private ArrayList<ShoeType> getAllList() {
         ArrayList<ShoeType> listAll = new ArrayList<>();
         db.collection("ShoeType")
                 .get()
@@ -83,7 +116,7 @@ public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.funcio
     public void update(String id) {
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        UpdateShoeTypeFragment updateShoeTypeFragment = new UpdateShoeTypeFragment();
+        AddUpdateShoeTypeFragment updateShoeTypeFragment = new AddUpdateShoeTypeFragment();
         updateShoeTypeFragment.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, updateShoeTypeFragment).addToBackStack(null).commit();
     }
@@ -115,10 +148,10 @@ public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.funcio
         builder.show();
     }
 
-    public void loadData() {
+    private void loadData() {
         list.clear();
         list = getAllList();
-        adapter = new ShoeTypeAdapter(getContext(), list, funcionInterface);
+        adapter = new ShoeTypeAdapter(getContext(), list, functionInterface);
         binding.rvShoeType.setAdapter(adapter);
     }
 }
