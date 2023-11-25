@@ -3,31 +3,29 @@ package fpoly.mds.beeshoes.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.DialogFunctionBinding;
-import fpoly.mds.beeshoes.databinding.ItemEmployeeBinding;
-import fpoly.mds.beeshoes.model.Employee;
+import fpoly.mds.beeshoes.databinding.ItemWorkBinding;
+import fpoly.mds.beeshoes.model.Work;
 
-public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
+public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<Employee> list;
+    private final ArrayList<Work> list;
     private final functionInterface functionInterface;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 
-    public EmployeeAdapter(Context context, ArrayList<Employee> list, functionInterface functionInterface) {
+    public WorkAdapter(Context context, ArrayList<Work> list, functionInterface functionInterface) {
         this.context = context;
         this.list = list;
         this.functionInterface = functionInterface;
@@ -36,28 +34,26 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemEmployeeBinding binding = ItemEmployeeBinding.inflate(LayoutInflater.from(context), parent, false);
+        ItemWorkBinding binding = ItemWorkBinding.inflate(LayoutInflater.from(context), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Employee item = list.get(position);
-        holder.binding.tvName.setText(item.getName());
-        holder.binding.tvBirthday.setText("Ngày sinh: " + sdf.format(item.getBirthday()));
-        holder.binding.tvPhone.setText("SĐT: " + item.getPhone());
-        holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());
-        holder.binding.tvRole.setText("Chức vụ: " + item.getRole());
-        holder.binding.tvSex.setText("Giới tính: " + item.getSex());
-        String img = item.getImg();
-        try {
-            Picasso.get().load(img).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera)
-                    .into(holder.binding.ivImg);
-        } catch (Exception e) {
-            Log.e("PicassoError", "Error loading image: " + e.getMessage());
+        Work work = list.get(position);
+        holder.binding.tvName.setText(work.getName());
+        holder.binding.tvShift.setText("Ca: " + work.getShift());
+        holder.binding.tvTimeStart.setText("Từ: " + dtf.format(work.getTimeStart()));
+        holder.binding.tvTimeEnd.setText("Đến: " + dtf.format(work.getTimeEnd()));
+        if (work.getStatus() == 0) {
+            holder.binding.tvStatus.setText("Ngoài ca");
+            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+        } else {
+            holder.binding.tvStatus.setText("Đang làm");
+            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
         }
         holder.binding.btnFuncion.setOnClickListener(v -> {
-            openDialogChucNang(item.getId());
+            openDialogChucNang(work.getId());
         });
     }
 
@@ -97,9 +93,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemEmployeeBinding binding;
+        ItemWorkBinding binding;
 
-        public ViewHolder(@NonNull ItemEmployeeBinding binding) {
+        public ViewHolder(@NonNull ItemWorkBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

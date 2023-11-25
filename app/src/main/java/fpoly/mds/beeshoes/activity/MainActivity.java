@@ -21,6 +21,7 @@ import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
 import fpoly.mds.beeshoes.fragment.ShoesFragment;
+import fpoly.mds.beeshoes.fragment.WorkFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.employee) {
             setTitle("Nhân viên");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
+        } else if (item.getItemId() == R.id.work) {
+            setTitle("Công việc");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
         }
         drawer.close();
         return false;

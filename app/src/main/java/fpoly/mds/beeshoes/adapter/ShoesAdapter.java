@@ -43,13 +43,13 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Shoe item = list.get(position);
         holder.binding.tvName.setText(item.getName());
-        holder.binding.tvPrice.setText("Giá: " + item.getPrice());
+        holder.binding.tvPrice.setText("Giá: " + item.getPrice() + "VND");
         holder.binding.tvShoeType.setText("Hãng: " + item.getShoeType());
         holder.binding.tvColor.setText("Màu sắc: " + item.getColor());
         holder.binding.tvSize.setText("Size: " + item.getSize());
         String img = item.getImg();
         try {
-            Picasso.get().load(img).placeholder(R.drawable.ic_shoe).error(R.drawable.ic_camera)
+            Picasso.get().load(img).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera)
                     .into(holder.binding.ivImg);
         } catch (Exception e) {
             Log.e("PicassoError", "Error loading image: " + e.getMessage());

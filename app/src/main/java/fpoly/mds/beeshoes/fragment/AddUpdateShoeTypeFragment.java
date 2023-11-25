@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.databinding.FragmentAddUpdateShoeBinding;
 import fpoly.mds.beeshoes.databinding.FragmentAddUpdateShoeTypeBinding;
 import fpoly.mds.beeshoes.model.ShoeType;
 
@@ -80,11 +79,11 @@ public class AddUpdateShoeTypeFragment extends Fragment {
         binding = FragmentAddUpdateShoeTypeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
-        bundle= getArguments();
+        bundle = getArguments();
         binding.cardPickerCamera.setOnClickListener(v -> {
             showDialogPick();
         });
-        if (bundle != null){
+        if (bundle != null) {
             id = bundle.getString("id");
             getID(id, new ShoeTypeCallback() {
                 @Override
@@ -99,11 +98,12 @@ public class AddUpdateShoeTypeFragment extends Fragment {
                 }
             });
         }
-            binding.btnSave.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(binding.edtName.getText().toString().trim())) {
+        binding.btnSave.setOnClickListener(v -> {
+            name = binding.edtName.getText().toString().trim();
+            if (TextUtils.isEmpty(name)) {
                 binding.edtName.setError("Nhập loại giày");
                 binding.edtName.requestFocus();
-            }else {
+            } else {
                 saveData();
             }
         });
