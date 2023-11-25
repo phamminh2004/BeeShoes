@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
-    tools:context=".fragment.AddUpdateShoeFragment">
+    tools:context=".fragment.AddUpdateEmployeeFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_name"
@@ -18,12 +18,27 @@
             android:id="@+id/edt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên giày" />
+            android:hint="Tên nhân viên" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconMode="clear_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngày sinh" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
-        android:id="@+id/sp_shoeType"
+        android:id="@+id/sp_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -33,44 +48,44 @@
         android:spinnerMode="dropdown" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_price"
+        android:id="@+id/til_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_price"
+            android:id="@+id/edt_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Giá" />
+            android:hint="SDT" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_color"
+        android:id="@+id/til_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_color"
+            android:id="@+id/edt_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Màu sắc" />
+            android:hint="Địa chỉ" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_size"
+        android:id="@+id/til_role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_size"
+            android:id="@+id/edt_role"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Size" />
+            android:hint="Chức vụ" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

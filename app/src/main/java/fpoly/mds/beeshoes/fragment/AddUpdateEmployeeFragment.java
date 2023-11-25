@@ -23,38 +23,31 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.UUID;
 
 import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.databinding.FragmentAddUpdateShoeBinding;
-import fpoly.mds.beeshoes.model.Shoe;
+import fpoly.mds.beeshoes.databinding.FragmentAddUpdateEmployeeBinding;
+import fpoly.mds.beeshoes.model.Employee;
 
-
-public class AddUpdateShoeFragment extends Fragment {
-    private final String REGEX_INT = "^\\d+$";
-    FragmentAddUpdateShoeBinding binding;
+public class AddUpdateEmployeeFragment extends Fragment {
+    private final String REGEX_PHONE_NUMBER = "^[0-9\\-\\+]{9,15}$";
+    private final String REGEX_DATE = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\\d{4}$";
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    FragmentAddUpdateEmployeeBinding binding;
     FirebaseFirestore db;
     FirebaseStorage storage;
     Bundle bundle;
-    String id, name, color, strPrice, strSize, shoeType;
-    ArrayList<String> listName;
+    String id, name, birthday, sex, phone, address, role;
     ArrayAdapter<String> adapter;
     private Uri img_uri;
     private final ActivityResultLauncher<Intent> cameraActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -88,19 +81,22 @@ public class AddUpdateShoeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentAddUpdateShoeBinding.inflate(inflater, container, false);
+        binding = FragmentAddUpdateEmployeeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         bundle = getArguments();
-        listName = new ArrayList<>();
-        loadSpinner();
         binding.cardPickerCamera.setOnClickListener(v -> {
             showDialogPick();
         });
-        binding.spShoeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        String[] listSex = {"Nam", "Nữ", "Khác"};
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, listSex);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spSex.setAdapter(adapter);
+        binding.spSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                shoeType = (String) parent.getItemAtPosition(position);
+                sex = (String) parent.getItemAtPosition(position);
+
             }
 
             @Override
@@ -110,15 +106,17 @@ public class AddUpdateShoeFragment extends Fragment {
         });
         if (bundle != null) {
             id = bundle.getString("id");
-            getID(id, new ShoeCallback() {
+            Log.e("id", id);
+            getID(id, new EmployeeCallback() {
                 @Override
-                public void onShoeLoaded(Shoe shoe) {
-                    binding.edtName.setText(shoe.getName());
-                    binding.spShoeType.setSelection(adapter.getPosition(shoe.getShoeType()));
-                    binding.edtPrice.setText(shoe.getPrice() + "");
-                    binding.edtSize.setText(shoe.getSize() + "");
-                    binding.edtColor.setText(shoe.getColor());
-                    Picasso.get().load(shoe.getImg()).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
+                public void onEmployeeLoaded(Employee employee) {
+                    binding.spSex.setSelection(adapter.getPosition(employee.getSex()));
+                    binding.edtName.setText(employee.getName());
+                    binding.edtAddress.setText(employee.getAddress());
+                    binding.edtBirthday.setText(sdf.format(employee.getBirthday()));
+                    binding.edtPhone.setText(employee.getPhone());
+                    binding.edtRole.setText(employee.getRole());
+                    Picasso.get().load(employee.getImg()).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
                 }
 
                 @Override
@@ -129,13 +127,16 @@ public class AddUpdateShoeFragment extends Fragment {
         }
         binding.btnSave.setOnClickListener(v -> {
             name = binding.edtName.getText().toString().trim();
-            color = binding.edtColor.getText().toString().trim();
-            strPrice = binding.edtPrice.getText().toString().trim();
-            strSize = binding.edtSize.getText().toString().trim();
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(color) || TextUtils.isEmpty(strPrice) || TextUtils.isEmpty(strSize)) {
+            address = binding.edtAddress.getText().toString().trim();
+            phone = binding.edtPhone.getText().toString().trim();
+            role = binding.edtRole.getText().toString().trim();
+            birthday = binding.edtBirthday.getText().toString().trim();
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(address) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(role) || TextUtils.isEmpty(birthday)) {
                 Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
-            } else if (!strPrice.matches(REGEX_INT) || !strSize.matches(REGEX_INT)) {
-                Toast.makeText(getContext(), "Giá và size là số tự nhiên", Toast.LENGTH_SHORT).show();
+            } else if (!phone.matches(REGEX_PHONE_NUMBER)) {
+                Toast.makeText(getContext(), "Số điện thoại sai định dạng", Toast.LENGTH_SHORT).show();
+            } else if (!birthday.matches(REGEX_DATE)) {
+                Toast.makeText(getContext(), "Ngày sinh sai định dạng (dd-MM-yyyy)", Toast.LENGTH_SHORT).show();
             } else {
                 saveData();
             }
@@ -191,7 +192,7 @@ public class AddUpdateShoeFragment extends Fragment {
     }
 
     private void uploadImageAndSaveData() {
-        StorageReference imageRef = FirebaseStorage.getInstance().getReference("shoes/" + id);
+        StorageReference imageRef = FirebaseStorage.getInstance().getReference("employee/" + id);
         imageRef.putFile(img_uri)
                 .addOnSuccessListener(taskSnapshot -> {
                     imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
@@ -205,84 +206,75 @@ public class AddUpdateShoeFragment extends Fragment {
     }
 
     private void updateDataWithoutImage() {
-        HashMap<String, Object> updateData = new HashMap<>();
-        updateData.put("name", name);
-        updateData.put("shoeType", shoeType);
-        updateData.put("price", Integer.parseInt(strPrice));
-        updateData.put("color", color);
-        updateData.put("size", Integer.parseInt(strSize));
-        db.collection("Shoes").document(id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+        HashMap<String, Object> employee = new HashMap<>();
+        employee.put("id", id);
+        employee.put("name", name);
+        employee.put("birthday", birthday);
+        employee.put("sex", sex);
+        employee.put("phone", phone);
+        employee.put("address", address);
+        employee.put("role", role);
+        db.collection("Employee").document(id).update(employee).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
             }
         });
     }
 
     private void updateFirestoreData(String imgUrl) {
-        HashMap<String, Object> hashMap = new Shoe(id, imgUrl, name, shoeType, Integer.parseInt(strPrice), color, Integer.parseInt(strSize)).convertHashMap();
-        db.collection("Shoes").document(id).set(hashMap)
-                .addOnSuccessListener(unused -> {
-                    Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
-                });
+        try {
+            HashMap<String, Object> hashMap = new Employee(id, imgUrl, name, sdf.parse(birthday), sex, phone, address, role).convertHashMap();
+            db.collection("Employee").document(id).set(hashMap)
+                    .addOnSuccessListener(unused -> {
+                        Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@androidx.annotation.NonNull Exception e) {
+                            Log.e("add", "Task failed: " + e.getMessage());
+                        }
+                    });
+        } catch (Exception e) {
+
+        }
     }
 
-    private void getID(String id, AddUpdateShoeFragment.ShoeCallback callback) {
-        DocumentReference docRef = db.collection("Shoes").document(id);
+    private void getID(String id, AddUpdateEmployeeFragment.EmployeeCallback callback) {
+        DocumentReference docRef = db.collection("Employee").document(id);
         docRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            Shoe shoe = documentSnapshot.toObject(Shoe.class);
-                            if (shoe != null) {
-                                callback.onShoeLoaded(shoe);
-                            } else {
-                                Log.d("Firebase", "Không thể chuyển đổi thành đối tượng ShoeType");
-                            }
-                        } else {
-                            Log.d("Firebase", "Tài liệu không tồn tại");
+                .addOnSuccessListener(document -> {
+                    if (document.exists()) {
+                        try {
+                            Employee employee = new Employee(
+                                    document.getString("id"),
+                                    document.getString("img"),
+                                    document.getString("name"),
+                                    sdf.parse(document.getString("birthday")),
+                                    document.getString("sex"),
+                                    document.getString("phone"),
+                                    document.getString("address"),
+                                    document.getString("role"));
+                            callback.onEmployeeLoaded(employee);
+                        } catch (Exception e) {
+
                         }
+
+                    } else {
+                        Log.d("Firebase", "Tài liệu không tồn tại cho id: " + id);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onFailure(e);
-                    }
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Lỗi khi lấy tài liệu nhân viên với id: " + id, e);
+                    callback.onFailure(e);
                 });
     }
 
-    private void loadSpinner() {
-        db.collection("ShoeType")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@androidx.annotation.NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (QueryDocumentSnapshot document : querySnapshot) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                                String name = document.getString("name");
-                                listName.add(name);
-                            }
-                            adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, listName);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            binding.spShoeType.setAdapter(adapter);
-                        } else {
-                            Log.d("TAG", "Error getting documents: " + task.getException());
-                        }
-                    }
-                });
-    }
 
-    private interface ShoeCallback {
-        void onShoeLoaded(Shoe shoe);
+    private interface EmployeeCallback {
+        void onEmployeeLoaded(Employee employee);
 
         void onFailure(Exception e);
     }
 }
-
-

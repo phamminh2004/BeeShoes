@@ -22,31 +22,36 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
+import fpoly.mds.beeshoes.adapter.EmployeeAdapter;
 import fpoly.mds.beeshoes.adapter.ShoesAdapter;
-import fpoly.mds.beeshoes.databinding.FragmentShoesBinding;
+import fpoly.mds.beeshoes.databinding.FragmentEmployeeBinding;
+import fpoly.mds.beeshoes.model.Employee;
 import fpoly.mds.beeshoes.model.Shoe;
 
-public class ShoesFragment extends Fragment implements ShoesAdapter.functionInterface {
-    FragmentShoesBinding binding;
+public class EmployeeFragment extends Fragment implements EmployeeAdapter.functionInterface {
+    FragmentEmployeeBinding binding;
     FirebaseFirestore db;
-    ShoesAdapter adapter;
-    ArrayList<Shoe> list = new ArrayList<>();
-    private ShoesAdapter.functionInterface functionInterface;
+    EmployeeAdapter adapter;
+    ArrayList<Employee> list = new ArrayList<>();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    private EmployeeAdapter.functionInterface functionInterface;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentShoesBinding.inflate(inflater, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentEmployeeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         functionInterface = this;
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
-        binding.rvShoes.setLayoutManager(manager);
+        binding.rvEmployee.setLayoutManager(manager);
         loadData();
         binding.btnAdd.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddUpdateShoeFragment()).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddUpdateEmployeeFragment()).addToBackStack(null).commit();
         });
         binding.edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -56,16 +61,16 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ArrayList<Shoe> templist = new ArrayList<>();
+                ArrayList<Employee> templist = new ArrayList<>();
                 try {
                     if (s.toString().trim() != "") {
-                        for (Shoe shoe : list) {
-                            if (String.valueOf(shoe.getName()).contains(String.valueOf(s))) {
-                                templist.add(shoe);
+                        for (Employee employee : list) {
+                            if (String.valueOf(employee.getName()).contains(String.valueOf(s))) {
+                                templist.add(employee);
                             }
                         }
-                        adapter = new ShoesAdapter(getContext(), templist, functionInterface);
-                        binding.rvShoes.setAdapter(adapter);
+                        adapter = new EmployeeAdapter(getContext(), templist, functionInterface);
+                        binding.rvEmployee.setAdapter(adapter);
                     }
                 } catch (Exception e) {
                     Log.e("TAG", "Lỗi tìm kiếm" + e.getMessage());
@@ -84,9 +89,9 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
     public void update(String id) {
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        AddUpdateShoeFragment updateShoeFragment = new AddUpdateShoeFragment();
-        updateShoeFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, updateShoeFragment).addToBackStack(null).commit();
+        AddUpdateEmployeeFragment updateEmployeeFragment = new AddUpdateEmployeeFragment();
+        updateEmployeeFragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, updateEmployeeFragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -96,10 +101,10 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
         builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               db.collection("Shoes").document(id).delete().addOnSuccessListener(command ->{
-                   Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
-                   loadData();
-               });
+                db.collection("Employee").document(id).delete().addOnSuccessListener(command ->{
+                    Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
+                    loadData();
+                });
                 dialogInterface.dismiss();
             }
         });
@@ -113,9 +118,9 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
         builder.show();
     }
 
-    private ArrayList<Shoe> getAllList() {
-        ArrayList<Shoe> listAll = new ArrayList<>();
-        db.collection("Shoes")
+    private ArrayList<Employee> getAllList() {
+        ArrayList<Employee> listAll = new ArrayList<>();
+        db.collection("Employee")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -125,16 +130,22 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
                             QuerySnapshot querySnapshot = task.getResult();
                             for (QueryDocumentSnapshot document : querySnapshot) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
-                                Shoe item = new Shoe(
-                                        document.getString("id"),
-                                        document.getString("img"),
-                                        document.getString("name"),
-                                        document.getString("shoeType"),
-                                        document.getLong("price").intValue(),
-                                        document.getString("color"),
-                                        document.getLong("size").intValue());
-                                listAll.add(item);
-                                adapter.notifyDataSetChanged();
+                                try {
+                                    Employee item = new Employee(
+                                            document.getString("id"),
+                                            document.getString("img"),
+                                            document.getString("name"),
+                                            sdf.parse(document.getString("birthday")),
+                                            document.getString("sex"),
+                                            document.getString("phone"),
+                                            document.getString("address"),
+                                            document.getString("role"));
+                                    listAll.add(item);
+                                    adapter.notifyDataSetChanged();
+                                } catch (Exception e) {
+
+                                }
+
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: " + task.getException());
@@ -145,8 +156,8 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
     }
 
     private void loadData() {
-            list = getAllList();
-            adapter = new ShoesAdapter(getContext(), list, functionInterface);
-            binding.rvShoes.setAdapter(adapter);
+        list = getAllList();
+        adapter = new EmployeeAdapter(getContext(), list, functionInterface);
+        binding.rvEmployee.setAdapter(adapter);
     }
 }

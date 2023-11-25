@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.fragment.AddAccountFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
+import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
 import fpoly.mds.beeshoes.fragment.ShoesFragment;
@@ -67,15 +68,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.add) {
             setTitle("Thêm tài khoản");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddAccountFragment()).commit();
-        } else if (item.getItemId()==R.id.home) {
+        } else if (item.getItemId() == R.id.home) {
             setTitle("Trang chủ");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
-        } else if (item.getItemId()==R.id.shoeType) {
+        } else if (item.getItemId() == R.id.shoeType) {
             setTitle("Loại giày");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
-        }else if(item.getItemId()==R.id.shoes){
+        } else if (item.getItemId() == R.id.shoes) {
             setTitle("Giày");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
+        } else if (item.getItemId() == R.id.employee) {
+            setTitle("Nhân viên");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
         }
         drawer.close();
         return false;

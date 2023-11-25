@@ -131,8 +131,8 @@ public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.functi
                 db.collection("ShoeType").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        loadData();
                         Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
+                        loadData();
                     }
                 });
                 dialogInterface.dismiss();
@@ -141,7 +141,6 @@ public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.functi
         builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getContext(), "Bạn chọn không xóa", Toast.LENGTH_SHORT).show();
                 dialogInterface.dismiss();
             }
         });
