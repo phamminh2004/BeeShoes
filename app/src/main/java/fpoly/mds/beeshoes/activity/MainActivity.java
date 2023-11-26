@@ -18,6 +18,7 @@ import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.fragment.AddAccountFragment;
 import fpoly.mds.beeshoes.fragment.BillFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
+import fpoly.mds.beeshoes.fragment.CustomerFragment;
 import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.bill) {
             setTitle("Hóa đơn");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
+        }else if (item.getItemId() == R.id.customer) {
+            setTitle("Khách hàng");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).commit();
         }
         drawer.close();
         return false;

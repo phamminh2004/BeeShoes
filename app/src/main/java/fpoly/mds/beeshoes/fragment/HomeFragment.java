@@ -33,6 +33,10 @@ public class HomeFragment extends Fragment {
             getActivity().setTitle("Công việc");
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
         });
+        binding.tvBill.setOnClickListener(v -> {
+            getActivity().setTitle("Hóa đơn");
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
+        });
         return binding.getRoot();
     }
 }

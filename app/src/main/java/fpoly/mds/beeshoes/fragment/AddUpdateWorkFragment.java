@@ -48,6 +48,7 @@ public class AddUpdateWorkFragment extends Fragment {
     int status;
     ArrayList<String> listName;
     ArrayAdapter<String> adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class AddUpdateWorkFragment extends Fragment {
                 public void onWorkLoaded(Work work) {
                     binding.edtTimeStart.setText(dtf.format(work.getTimeStart()));
                     binding.edtTimeEnd.setText(dtf.format(work.getTimeEnd()));
-                    binding.edtShift.setText(work.getShift()+"");
+                    binding.edtShift.setText(work.getShift() + "");
                 }
 
                 @Override
@@ -141,20 +142,20 @@ public class AddUpdateWorkFragment extends Fragment {
     private void saveData() {
         if (bundle == null) {
             id = UUID.randomUUID().toString();
-            updateFirestoreData();
-        }else{
-          updateFirestoreData();
+            uploadFirestoreData();
+        } else {
+            uploadFirestoreData();
         }
     }
 
-    private void updateFirestoreData() {
+    private void uploadFirestoreData() {
         int shift = Integer.parseInt(binding.edtShift.getText().toString());
         TemporalAccessor tempS = dtf.parse(binding.edtTimeStart.getText().toString());
         LocalTime timeStart = LocalTime.from(tempS);
         TemporalAccessor tempE = dtf.parse(binding.edtTimeEnd.getText().toString());
         LocalTime timeEnd = LocalTime.from(tempE);
         LocalTime localTimeNow = LocalTime.now();
-        if (timeStart.isAfter(timeEnd)){
+        if (timeStart.isAfter(timeEnd)) {
             Toast.makeText(getContext(), "Thời gian bắt đầu, kết thúc sai định dạng", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -168,7 +169,7 @@ public class AddUpdateWorkFragment extends Fragment {
         db.collection("Work").document(id).set(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
             }
         });

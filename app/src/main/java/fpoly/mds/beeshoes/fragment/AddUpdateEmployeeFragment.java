@@ -197,7 +197,7 @@ public class AddUpdateEmployeeFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> {
                     imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         String imgUrl = downloadUri.toString();
-                        updateFirestoreData(imgUrl);
+                        uploadFirestoreData(imgUrl);
                     });
                 })
                 .addOnFailureListener(e -> {
@@ -223,12 +223,12 @@ public class AddUpdateEmployeeFragment extends Fragment {
         });
     }
 
-    private void updateFirestoreData(String imgUrl) {
+    private void uploadFirestoreData(String imgUrl) {
         try {
             HashMap<String, Object> hashMap = new Employee(id, imgUrl, name, sdf.parse(birthday), sex, phone, address, role).convertHashMap();
             db.collection("Employee").document(id).set(hashMap)
                     .addOnSuccessListener(unused -> {
-                        Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

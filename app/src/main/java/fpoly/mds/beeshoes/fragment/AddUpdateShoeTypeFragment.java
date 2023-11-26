@@ -163,7 +163,7 @@ public class AddUpdateShoeTypeFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> {
                     imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         String imgUrl = downloadUri.toString();
-                        updateFirestoreData(imgUrl);
+                        uploadFirestoreData(imgUrl);
                     });
                 })
                 .addOnFailureListener(e -> {
@@ -183,11 +183,11 @@ public class AddUpdateShoeTypeFragment extends Fragment {
         });
     }
 
-    private void updateFirestoreData(String imgUrl) {
+    private void uploadFirestoreData(String imgUrl) {
         HashMap<String, Object> hashMap = new ShoeType(id, imgUrl, name).convertHashMap();
         db.collection("ShoeType").document(id).set(hashMap)
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
                 });
     }

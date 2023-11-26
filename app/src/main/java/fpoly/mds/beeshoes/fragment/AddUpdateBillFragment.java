@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +36,7 @@ import java.util.UUID;
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.FragmentAddUpdateBillBinding;
 import fpoly.mds.beeshoes.model.Bill;
+import fpoly.mds.beeshoes.model.Customer;
 import fpoly.mds.beeshoes.model.Shoe;
 
 public class AddUpdateBillFragment extends Fragment {
@@ -102,7 +104,8 @@ public class AddUpdateBillFragment extends Fragment {
                     binding.edtPrice.setText(bill.getPrice()+"");
                     binding.edtNameCustomer.setText(bill.getNameCustomer());
                     binding.edtAddress.setText(bill.getAddress());
-                    binding.edtPrice.setText(sdf.format(bill.getDate()));
+                    binding.edtPhone.setText(bill.getPhone());
+                    binding.edtDate.setText(sdf.format(bill.getDate()));
                 }
 
                 @Override
@@ -150,9 +153,9 @@ public class AddUpdateBillFragment extends Fragment {
     private void saveData() {
         if (bundle == null) {
             id = UUID.randomUUID().toString();
-            updateFirestoreData();
+            uploadFirestoreData();
         } else {
-            updateFirestoreData();
+            uploadFirestoreData();
         }
     }
 
@@ -187,7 +190,7 @@ public class AddUpdateBillFragment extends Fragment {
                 });
     }
 
-    private void updateFirestoreData() {
+    private void uploadFirestoreData() {
         try {
             Bill bill = new Bill(id, nameShoe, Integer.parseInt(strPrice), nameCustomer, phone, address, sdf.parse(date), status);
             HashMap<String, Object> hashMap = bill.convertHashMap();
@@ -195,14 +198,41 @@ public class AddUpdateBillFragment extends Fragment {
                     addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
                         }
                     });
-        } catch (Exception e) {
+            uploadCustomer();
+        } catch (Exception e) {}
+    }
+    private void saveCustomerData(){
+        Customer customer = new Customer(id,nameCustomer, address, phone);
+        HashMap<String, Object> hashMap1 = customer.converHashMap();
+        db.collection("Customer").document(id).set(hashMap1).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    private void uploadCustomer(){
+        CollectionReference collectionReference = db.collection("Customer");
 
-        }
+        Query query = collectionReference.whereEqualTo("name", nameCustomer);
 
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Customer customer1 = document.toObject(Customer.class);
+                            id = customer1.getId();
+                        }
+                    }
+                }
+            });
+            saveCustomerData();
     }
 
     private void loadSpinner() {

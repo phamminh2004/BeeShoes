@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
+    android:layout_marginVertical="2dp"
+    android:background="@drawable/custom_background_item"
     android:padding="10dp">
 
     <LinearLayout
@@ -17,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mã hóa đơn: hdj333-443ffgg-mjnnjf"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -25,8 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="7"
+            android:textColor="@color/red"
             android:text="Nike Air Force 1"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
