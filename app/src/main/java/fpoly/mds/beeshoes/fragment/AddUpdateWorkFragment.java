@@ -48,7 +48,6 @@ public class AddUpdateWorkFragment extends Fragment {
     int status;
     ArrayList<String> listName;
     ArrayAdapter<String> adapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

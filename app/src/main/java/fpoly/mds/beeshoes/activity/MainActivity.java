@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.fragment.AddAccountFragment;
+import fpoly.mds.beeshoes.fragment.BillFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
 import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.work) {
             setTitle("Công việc");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
+        } else if (item.getItemId() == R.id.bill) {
+            setTitle("Hóa đơn");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
         }
         drawer.close();
         return false;
