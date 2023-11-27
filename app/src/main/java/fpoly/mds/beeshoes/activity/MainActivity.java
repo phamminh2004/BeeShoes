@@ -20,6 +20,7 @@ import fpoly.mds.beeshoes.fragment.BillFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
 import fpoly.mds.beeshoes.fragment.CustomerFragment;
 import fpoly.mds.beeshoes.fragment.EmployeeFragment;
+import fpoly.mds.beeshoes.fragment.HomeCustomerFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
 import fpoly.mds.beeshoes.fragment.ShoesFragment;
@@ -51,14 +52,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHeaderView = nv.getHeaderView(0);
         Intent intent = getIntent();
         String role = intent.getStringExtra("role");
-        if (role.equals("manager")) {
-            nv.getMenu().findItem(R.id.add).setVisible(true);
-        }
-        if (savedInstanceState == null) {
-            setTitle("Trang chủ");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
-        }
 
+        if (!role.equals("customer") && savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
+        } else if (role.equals("manager")) {
+            nv.getMenu().findItem(R.id.add).setVisible(true);
+        } else {
+            nv.getMenu().findItem(R.id.home).setVisible(false);
+            nv.getMenu().findItem(R.id.manage).setVisible(false);
+            nv.getMenu().findItem(R.id.statistic).setVisible(false);
+            nv.getMenu().findItem(R.id.homeCustomer).setVisible(true);
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).commit();
+        }
     }
 
     @Override
@@ -89,9 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.bill) {
             setTitle("Hóa đơn");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
-        }else if (item.getItemId() == R.id.customer) {
+        } else if (item.getItemId() == R.id.customer) {
             setTitle("Khách hàng");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).commit();
+        } else if (item.getItemId() == R.id.homeCustomer) {
+            setTitle("Khách hàng");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).commit();
         }
         drawer.close();
         return false;

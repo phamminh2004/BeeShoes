@@ -7,13 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
@@ -25,6 +25,7 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
     private final Context context;
     private final ArrayList<Shoe> list;
     private final functionInterface functionInterface;
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     public ShoesAdapter(Context context, ArrayList<Shoe> list, functionInterface functionInterface) {
         this.context = context;
@@ -43,7 +44,7 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Shoe item = list.get(position);
         holder.binding.tvName.setText(item.getName());
-        holder.binding.tvPrice.setText("Giá: " + item.getPrice() + "VND");
+        holder.binding.tvPrice.setText("Giá: " + decimalFormat.format(item.getPrice()) + "VND");
         holder.binding.tvShoeType.setText("Hãng: " + item.getShoeType());
         holder.binding.tvColor.setText("Màu sắc: " + item.getColor());
         holder.binding.tvSize.setText("Size: " + item.getSize());
@@ -63,6 +64,7 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
     public int getItemCount() {
         return list.size();
     }
+
     private void openDialogChucNang(String id) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         DialogFunctionBinding binding = DialogFunctionBinding.inflate(inflater);
@@ -92,6 +94,7 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
 
         void delete(String id);
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemShoesBinding binding;
 

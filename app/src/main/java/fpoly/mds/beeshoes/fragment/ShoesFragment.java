@@ -132,7 +132,8 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
                                         document.getString("shoeType"),
                                         document.getLong("price").intValue(),
                                         document.getString("color"),
-                                        document.getLong("size").intValue());
+                                        document.getLong("size").intValue(),
+                                        document.getString("describe"));
                                 listAll.add(item);
                                 adapter.notifyDataSetChanged();
                             }

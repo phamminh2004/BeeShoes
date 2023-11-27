@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import fpoly.mds.beeshoes.databinding.ActivityLoginBinding;
-import fpoly.mds.beeshoes.model.User;
 
 public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
@@ -38,13 +37,16 @@ public class Login extends AppCompatActivity {
         binding.tvPasswordRecovery.setOnClickListener(v -> {
             startActivity(new Intent(Login.this, PasswordRecovery.class));
         });
+        binding.tvLogin.setOnClickListener(v -> {
+            startActivity(new Intent(Login.this, Register.class));
+        });
     }
 
     public void validate() {
         String email = binding.edtEmail.getText().toString().trim();
         String password = binding.edtPassword.getText().toString().trim();
         if (TextUtils.isEmpty(email)) {
-            binding.edtEmail.setError("Nhập tài khoản");
+            binding.edtEmail.setError("Nhập email");
             binding.edtEmail.requestFocus();
         } else if (TextUtils.isEmpty(password)) {
             binding.edtPassword.setError("Nhập mật khẩu");
@@ -69,6 +71,9 @@ public class Login extends AppCompatActivity {
                                                     startActivity(intent);
                                                 } else if ("employee".equals(role)) {
                                                     intent.putExtra("role", "employee");
+                                                    startActivity(intent);
+                                                }else {
+                                                    intent.putExtra("role", "customer");
                                                     startActivity(intent);
                                                 }
                                             }

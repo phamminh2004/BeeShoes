@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private final ArrayList<Bill> list;
     private final functionInterface functionInterface;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     public BillAdapter(Context context, ArrayList<Bill> list, functionInterface functionInterface) {
         this.context = context;
@@ -43,7 +45,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         Bill item = list.get(position);
         holder.binding.tvId.setText("ID: " + item.getId());
         holder.binding.tvNameShoe.setText(item.getNameShoe());
-        holder.binding.tvPrice.setText("Giá: " + item.getPrice());
+        holder.binding.tvPrice.setText("Giá: " + decimalFormat.format(item.getPrice()) + "VND");
         holder.binding.tvNameCustomer.setText("Tên khách hàng: " + item.getNameCustomer());
         holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());
         holder.binding.tvPhone.setText("SĐT: " + item.getPhone());

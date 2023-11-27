@@ -2,28 +2,26 @@ package fpoly.mds.beeshoes.model;
 
 import java.util.HashMap;
 
-public class Shoe {
+public class Cart {
     private String id;
     private String img;
     private String name;
-    private String shoeType;
     private int price;
     private String color;
     private int size;
-    private String describe;
+    private int quantity;
 
-    public Shoe() {
+    public Cart() {
     }
 
-    public Shoe(String id, String img, String name, String shoeType, int price, String color, int size, String describe) {
+    public Cart(String id, String img, String name, int price, String color, int size, int quantity) {
         this.id = id;
         this.img = img;
         this.name = name;
-        this.shoeType = shoeType;
         this.price = price;
         this.color = color;
         this.size = size;
-        this.describe = describe;
+        this.quantity = quantity;
     }
 
     public String getId() {
@@ -50,14 +48,6 @@ public class Shoe {
         this.name = name;
     }
 
-    public String getShoeType() {
-        return shoeType;
-    }
-
-    public void setShoeType(String shoeType) {
-        this.shoeType = shoeType;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -82,24 +72,23 @@ public class Shoe {
         this.size = size;
     }
 
-    public String getDescribe() {
-        return describe;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public HashMap<String, Object> convertHashMap() {
-        HashMap<String, Object> shoe = new HashMap<>();
-        shoe.put("id", id);
-        shoe.put("img", img);
-        shoe.put("name", name);
-        shoe.put("shoeType", shoeType);
-        shoe.put("price", price);
-        shoe.put("color", color);
-        shoe.put("size", size);
-        shoe.put("describe", describe);
-        return shoe;
+        HashMap<String, Object> cart = new HashMap<>();
+        cart.put("id", id);
+        cart.put("img", img);
+        cart.put("name", name);
+        cart.put("price", price);
+        cart.put("color", color);
+        cart.put("size", size);
+        cart.put("quantity", quantity);
+        return cart;
     }
 }

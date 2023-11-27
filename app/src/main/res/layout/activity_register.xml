@@ -8,7 +8,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingHorizontal="30dp"
-    tools:context=".activity.Login">
+    tools:context=".activity.Register">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginVertical="30dp"
-            android:text="Đăng nhập"
+            android:text="Đăng ký"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -86,54 +86,42 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_rePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            app:passwordToggleEnabled="true">
 
-            <CheckBox
-                android:id="@+id/chk_checkPass"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/edt_rePassword"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Lưu mật khẩu"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:drawableStart="@drawable/ic_key"
+                android:drawablePadding="5dp"
+                android:hint="Nhập lại mật khẩu"
+                android:inputType="textPassword" />
 
-            <TextView
-                android:id="@+id/tv_passwordRecovery"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:text="Quên mật khẩu?"
-                android:textSize="16sp" />
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/custom_button"
-            android:text="Đăng nhập"
+            android:text="Đăng ký"
             app:backgroundTint="@null" />
+
         <TextView
             android:id="@+id/tv_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:text="@string/login"
+            android:text="@string/reg"
             android:textSize="16sp" />
     </LinearLayout>
-
-    <View
-        android:layout_width="200dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="30dp"
-        android:background="#000000" />
 
 </LinearLayout>

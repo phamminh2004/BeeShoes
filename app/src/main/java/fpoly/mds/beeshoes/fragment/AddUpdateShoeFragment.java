@@ -53,7 +53,7 @@ public class AddUpdateShoeFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseStorage storage;
     Bundle bundle;
-    String id, name, color, strPrice, strSize, shoeType;
+    String id, name, color, strPrice, strSize, shoeType, describe;
     ArrayList<String> listName;
     ArrayAdapter<String> adapter;
     private Uri img_uri;
@@ -118,6 +118,7 @@ public class AddUpdateShoeFragment extends Fragment {
                     binding.edtPrice.setText(shoe.getPrice() + "");
                     binding.edtSize.setText(shoe.getSize() + "");
                     binding.edtColor.setText(shoe.getColor());
+                    binding.edtDescribe.setText(shoe.getDescribe());
                     Picasso.get().load(shoe.getImg()).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera).into(binding.cardPickerCamera);
                 }
 
@@ -132,7 +133,8 @@ public class AddUpdateShoeFragment extends Fragment {
             color = binding.edtColor.getText().toString().trim();
             strPrice = binding.edtPrice.getText().toString().trim();
             strSize = binding.edtSize.getText().toString().trim();
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(color) || TextUtils.isEmpty(strPrice) || TextUtils.isEmpty(strSize)) {
+            describe = binding.edtDescribe.getText().toString().trim();
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(color) || TextUtils.isEmpty(strPrice) || TextUtils.isEmpty(strSize)||TextUtils.isEmpty(describe)) {
                 Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
             } else if (!strPrice.matches(REGEX_INT) || !strSize.matches(REGEX_INT)) {
                 Toast.makeText(getContext(), "Giá và size là số tự nhiên", Toast.LENGTH_SHORT).show();
@@ -211,6 +213,7 @@ public class AddUpdateShoeFragment extends Fragment {
         updateData.put("price", Integer.parseInt(strPrice));
         updateData.put("color", color);
         updateData.put("size", Integer.parseInt(strSize));
+        updateData.put("describe", describe);
         db.collection("Shoes").document(id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -221,7 +224,7 @@ public class AddUpdateShoeFragment extends Fragment {
     }
 
     private void uploadFirestoreData(String imgUrl) {
-        HashMap<String, Object> hashMap = new Shoe(id, imgUrl, name, shoeType, Integer.parseInt(strPrice), color, Integer.parseInt(strSize)).convertHashMap();
+        HashMap<String, Object> hashMap = new Shoe(id, imgUrl, name, shoeType, Integer.parseInt(strPrice), color, Integer.parseInt(strSize), describe).convertHashMap();
         db.collection("Shoes").document(id).set(hashMap)
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
