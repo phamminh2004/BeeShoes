@@ -28,18 +28,18 @@ import fpoly.mds.beeshoes.model.Cart;
 import fpoly.mds.beeshoes.model.Shoe;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
-    DecimalFormat decimalFormat = new DecimalFormat("#,###");
     private final Context context;
     private final ArrayList<Cart> list;
-    int quantity;
+    private final functionInterface functionInterface;
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
     FirebaseFirestore db;
     int price;
-    private final functionInterface functionInterface;
+    int quantity;
 
-    public CartAdapter(Context context, ArrayList<Cart> list,functionInterface functionInterface) {
+    public CartAdapter(Context context, ArrayList<Cart> list, functionInterface functionInterface) {
         this.context = context;
         this.list = list;
-        this.functionInterface= functionInterface;
+        this.functionInterface = functionInterface;
     }
 
     @NonNull
@@ -52,6 +52,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart cart = list.get(position);
+        String id = cart.getId();
         quantity = cart.getQuantity();
         holder.binding.tvName.setText(cart.getName());
         holder.binding.tvPrice.setText(decimalFormat.format(cart.getPrice()) + "VND");
@@ -66,18 +67,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             Log.e("PicassoError", "Error loading image: " + e.getMessage());
         }
 
-
         holder.binding.ivMinus.setOnClickListener(v -> {
             if (quantity > 1) {
-                quantity--;
                 getName(cart.getName(), new ShoeCallback() {
                     @Override
                     public void onShoeLoaded(Shoe shoe) {
+                        quantity--;
                         price = shoe.getPrice() * quantity;
                         holder.binding.tvQuantity.setText(quantity + "");
                         holder.binding.tvPrice.setText(decimalFormat.format(price) + "VND");
-                        updateFirebase(cart.getId());
                         functionInterface.updateData();
+                        updateFirebase(id);
                     }
 
                     @Override
@@ -88,15 +88,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         });
         holder.binding.ivPlus.setOnClickListener(v -> {
-            quantity++;
             getName(cart.getName(), new ShoeCallback() {
                 @Override
                 public void onShoeLoaded(Shoe shoe) {
+                    quantity = cart.getQuantity();
+                    quantity++;
                     price = shoe.getPrice() * quantity;
                     holder.binding.tvQuantity.setText(quantity + "");
                     holder.binding.tvPrice.setText(decimalFormat.format(price) + "VND");
-                    updateFirebase(cart.getId());
                     functionInterface.updateData();
+                    updateFirebase(id);
                 }
 
                 @Override
@@ -165,9 +166,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         void onFailure(Exception e);
     }
+
     public interface functionInterface {
         void updateData();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemCartBinding binding;
 

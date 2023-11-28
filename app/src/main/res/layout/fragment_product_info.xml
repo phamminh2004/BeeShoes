@@ -79,35 +79,35 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:gravity="end"
+            app:cardBackgroundColor="#cccccc"
             app:cardCornerRadius="10dp">
 
             <ImageView
                 android:id="@+id/iv_minus"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="#CCCCCC"
-                android:padding="10dp"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
                 android:src="@drawable/ic_minus" />
 
             <TextView
                 android:id="@+id/tv_quantity"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="40dp"
-                android:background="#CCCCCC"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="35dp"
                 android:gravity="center"
                 android:text="1"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/iv_plus"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="80dp"
-                android:background="#CCCCCC"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="70dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:padding="6dp"
                 android:src="@drawable/ic_plus" />
         </androidx.cardview.widget.CardView>
@@ -137,11 +137,11 @@
             android:textStyle="bold" />
 
         <Button
-            android:layout_marginTop="10dp"
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
             android:background="@drawable/custom_button"
             android:drawableLeft="@drawable/ic_cart"
             android:text="Thêm vào giỏ hàng"

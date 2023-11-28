@@ -53,12 +53,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = getIntent();
         String role = intent.getStringExtra("role");
 
-        if (!role.equals("customer") && savedInstanceState == null) {
+        if ("manager".equals(role)) {
+            nv.getMenu().findItem(R.id.addAccount).setVisible(true);
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
-        } else if (role.equals("manager")) {
-            nv.getMenu().findItem(R.id.add).setVisible(true);
+        } else if (role.equals("employee")) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
         } else {
-            nv.getMenu().findItem(R.id.home).setVisible(false);
+            nv.getMenu().findItem(R.id.homeManage).setVisible(false);
             nv.getMenu().findItem(R.id.manage).setVisible(false);
             nv.getMenu().findItem(R.id.statistic).setVisible(false);
             nv.getMenu().findItem(R.id.homeCustomer).setVisible(true);
@@ -69,37 +70,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
+            startActivity(new Intent(MainActivity.this, Login.class));
             finish();
         } else if (item.getItemId() == R.id.changePassword) {
             setTitle("Đổi mật khẩu");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ChangePasswordFragment()).commit();
-        } else if (item.getItemId() == R.id.add) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ChangePasswordFragment()).addToBackStack(null).commit();
+        } else if (item.getItemId() == R.id.addAccount) {
             setTitle("Thêm tài khoản");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddAccountFragment()).commit();
-        } else if (item.getItemId() == R.id.home) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddAccountFragment()).addToBackStack(null).commit();
+        } else if (item.getItemId() == R.id.homeManage) {
             setTitle("Trang chủ");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.shoeType) {
             setTitle("Loại giày");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoeTypeFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.shoes) {
             setTitle("Giày");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ShoesFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.employee) {
             setTitle("Nhân viên");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new EmployeeFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.work) {
             setTitle("Công việc");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.bill) {
             setTitle("Hóa đơn");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.customer) {
             setTitle("Khách hàng");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.homeCustomer) {
             setTitle("Khách hàng");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).addToBackStack(null).commit();
         }
         drawer.close();
         return false;

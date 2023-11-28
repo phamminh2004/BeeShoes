@@ -33,7 +33,7 @@ public class Register extends AppCompatActivity {
             validate();
         });
         binding.tvLogin.setOnClickListener(v -> {
-            startActivity(new Intent(Register.this, Login.class));
+            onBackPressed();
         });
     }
 
@@ -72,9 +72,14 @@ public class Register extends AppCompatActivity {
                     startActivity(new Intent(Register.this, Login.class));
                     Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Tạo tài khoản thất bại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

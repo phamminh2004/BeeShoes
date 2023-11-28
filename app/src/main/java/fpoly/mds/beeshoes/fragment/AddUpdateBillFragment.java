@@ -48,7 +48,7 @@ public class AddUpdateBillFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseStorage storage;
     Bundle bundle;
-    String id, nameShoe, strPrice, nameCustomer, phone, address, date;
+    String id, strPrice, nameCustomer, phone, address, date;
     int status;
     Date currentDate;
     ArrayList<String> listNameShoe;
@@ -69,11 +69,11 @@ public class AddUpdateBillFragment extends Fragment {
         binding.spNameShoe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nameShoe = (String) parent.getItemAtPosition(position);
+//                nameShoe = (String) parent.getItemAtPosition(position);/
 
                 CollectionReference collectionReference = db.collection("Shoes");
 
-                Query query = collectionReference.whereEqualTo("name", nameShoe);
+                Query query = collectionReference.whereEqualTo("name", "nameShoe");
 
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -135,7 +135,7 @@ public class AddUpdateBillFragment extends Fragment {
             } catch (Exception e) {
 
             }
-            if (TextUtils.isEmpty(nameShoe) || TextUtils.isEmpty(address) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(nameCustomer) || TextUtils.isEmpty(date) || TextUtils.isEmpty(strPrice)) {
+            if ( TextUtils.isEmpty(address) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(nameCustomer) || TextUtils.isEmpty(date) || TextUtils.isEmpty(strPrice)) {
                 Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
             } else if (!phone.matches(REGEX_PHONE_NUMBER)) {
                 Toast.makeText(getContext(), "Số điện thoại sai định dạng", Toast.LENGTH_SHORT).show();
@@ -167,7 +167,6 @@ public class AddUpdateBillFragment extends Fragment {
                         try {
                             Bill bill = new Bill(
                                     document.getId(),
-                                    document.getString("nameShoe"),
                                     document.getLong("price").intValue(),
                                     document.getString("nameCustomer"),
                                     document.getString("phone"),
@@ -192,7 +191,7 @@ public class AddUpdateBillFragment extends Fragment {
 
     private void uploadFirestoreData() {
         try {
-            Bill bill = new Bill(id, nameShoe, Integer.parseInt(strPrice), nameCustomer, phone, address, sdf.parse(date), status);
+            Bill bill = new Bill(id, Integer.parseInt(strPrice), nameCustomer, phone, address, sdf.parse(date), status);
             HashMap<String, Object> hashMap = bill.convertHashMap();
             db.collection("Bill").document(id).set(hashMap).
                     addOnSuccessListener(new OnSuccessListener<Void>() {

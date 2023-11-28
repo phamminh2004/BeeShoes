@@ -24,7 +24,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<Bill> list;
     private final functionInterface functionInterface;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     public BillAdapter(Context context, ArrayList<Bill> list, functionInterface functionInterface) {
@@ -44,7 +44,6 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Bill item = list.get(position);
         holder.binding.tvId.setText("ID: " + item.getId());
-        holder.binding.tvNameShoe.setText(item.getNameShoe());
         holder.binding.tvPrice.setText("Giá: " + decimalFormat.format(item.getPrice()) + "VND");
         holder.binding.tvNameCustomer.setText("Tên khách hàng: " + item.getNameCustomer());
         holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());

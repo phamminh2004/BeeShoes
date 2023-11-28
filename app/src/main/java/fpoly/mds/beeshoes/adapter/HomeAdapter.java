@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -17,20 +18,19 @@ import java.util.HashMap;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.ItemProductBinding;
-import fpoly.mds.beeshoes.fragment.HomeCustomerFragment;
 import fpoly.mds.beeshoes.model.Cart;
 import fpoly.mds.beeshoes.model.Shoe;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-    DecimalFormat decimalFormat = new DecimalFormat("#,###");
     private final Context context;
     private final ArrayList<Shoe> list;
     private final functionInterface functionInterface;
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     public HomeAdapter(Context context, ArrayList<Shoe> list, functionInterface functionInterface) {
         this.context = context;
         this.list = list;
-        this.functionInterface =functionInterface;
+        this.functionInterface = functionInterface;
     }
 
     @NonNull
@@ -55,15 +55,30 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(v -> {
             functionInterface.click(item.getId());
         });
+        holder.binding.btnAdd.setOnClickListener(v -> {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String id = item.getId();
+            String name = item.getName();
+            String color = item.getColor();
+            int quantity = 1;
+            int size = item.getSize();
+            int price = item.getPrice();
+            Cart cart = new Cart(id, img, name, price, color, size, quantity);
+            HashMap<String, Object> hashMap = cart.convertHashMap();
+            db.collection("Cart").document(id).set(hashMap)
+                    .addOnSuccessListener(unused -> {
+                        Toast.makeText(context, "Thành công", Toast.LENGTH_SHORT).show();
+                    });
+        });
+    }
 
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
 
     public interface functionInterface {
         void click(String id);
-    }
-    @Override
-    public int getItemCount() {
-        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

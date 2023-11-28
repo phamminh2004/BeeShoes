@@ -120,13 +120,14 @@
             android:background="@drawable/custom_button"
             android:text="Đăng nhập"
             app:backgroundTint="@null" />
+
         <TextView
-            android:id="@+id/tv_login"
+            android:id="@+id/tv_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:text="@string/login"
+            android:text="@string/reg"
             android:textSize="16sp" />
     </LinearLayout>
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeManage"
         android:icon="@drawable/ic_home"
         android:title="Trang chủ" />
     <item
@@ -63,7 +63,7 @@
         <item android:title="Người dùng">
             <menu>
                 <item
-                    android:id="@+id/add"
+                    android:id="@+id/addAccount"
                     android:icon="@drawable/ic_add"
                     android:title="Tạo tài khoản nhân viên"
                     android:visible="false" />

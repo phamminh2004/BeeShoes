@@ -1,14 +1,17 @@
 package fpoly.mds.beeshoes.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,40 +22,46 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.adapter.CartAdapter;
-import fpoly.mds.beeshoes.databinding.FragmentCartBinding;
+import fpoly.mds.beeshoes.adapter.OrderAdapter;
+import fpoly.mds.beeshoes.databinding.FragmentOrderBinding;
 import fpoly.mds.beeshoes.model.Cart;
-import fpoly.mds.beeshoes.model.Shoe;
 
-public class CartFragment extends Fragment implements CartAdapter.functionInterface {
-    FragmentCartBinding binding;
+public class OrderFragment extends Fragment {
+    private final String REGEX_PHONE_NUMBER = "^[0-9\\-\\+]{9,15}$";
+    FragmentOrderBinding binding;
     FirebaseFirestore db;
-    CartAdapter adapter;
-    int price;
+    OrderAdapter adapter;
     ArrayList<Cart> list;
+    int price;
+    String nameCustomer, address, phone;
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
-    private CartAdapter.functionInterface functionInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentCartBinding.inflate(inflater, container, false);
+        binding = FragmentOrderBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<>();
-        functionInterface = this;
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvProduct.setLayoutManager(manager);
         loadData();
-        binding.btnOrder.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new OrderFragment()).addToBackStack(null).commit();
+        binding.tvSubmit.setOnClickListener(v -> {
+        nameCustomer = binding.edtNameCustomer.getText().toString();
+        address = binding.edtAddress.getText().toString();
+        phone = binding.edtPhone.getText().toString();
+            if (TextUtils.isEmpty(nameCustomer) || TextUtils.isEmpty(address) || TextUtils.isEmpty(phone)) {
+                Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+            } else if (!phone.matches(REGEX_PHONE_NUMBER)) {
+                Toast.makeText(getContext(), "Số điện thoại sai định dạng", Toast.LENGTH_SHORT).show();
+            } else {
+
+            }
         });
         return binding.getRoot();
     }
 
-    private void getAllList(FirestoreCallback callback) {
-        ArrayList<Cart> list = new ArrayList<>();
+    private void getAllList(CartFragment.FirestoreCallback callback) {
         db.collection("Cart")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -83,36 +92,18 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
                 });
     }
 
+
     private void loadData() {
-        getAllList(new FirestoreCallback() {
+        getAllList(new CartFragment.FirestoreCallback() {
             @Override
             public void onCallback(ArrayList<Cart> list) {
-                adapter = new CartAdapter(getContext(), list, functionInterface);
+                adapter = new OrderAdapter(getContext(), list);
                 binding.rvProduct.setAdapter(adapter);
-                binding.tvPrice.setText(decimalFormat.format(price) + "VND");
+                binding.tvPriceShoe.setText("đ" + decimalFormat.format(price));
+                int totalPrice = price + 30000;
+                binding.tvPriceTotal.setText("đ" + decimalFormat.format(totalPrice));
+                binding.tvTotal.setText("đ" + decimalFormat.format(totalPrice));
             }
         });
-    }
-
-    @Override
-    public void updateData() {
-        getAllList(new FirestoreCallback() {
-            @Override
-            public void onCallback(ArrayList<Cart> list) {
-                adapter = new CartAdapter(getContext(), list, functionInterface);
-                binding.rvProduct.setAdapter(adapter);
-                binding.tvPrice.setText(decimalFormat.format(price) + "VND");
-            }
-        });
-    }
-
-    public interface FirestoreCallback {
-        void onCallback(ArrayList<Cart> list);
-    }
-
-    private interface ShoeCallback {
-        void onShoeLoaded(Shoe shoe);
-
-        void onFailure(Exception e);
     }
 }

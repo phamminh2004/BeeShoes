@@ -65,9 +65,9 @@ public class BillFragment extends Fragment implements BillAdapter.functionInterf
                 try {
                     if (s.toString().trim() != "") {
                         for (Bill bill : list) {
-                            if (String.valueOf(bill.getNameShoe()).contains(String.valueOf(s))) {
-                                templist.add(bill);
-                            }
+//                            if (String.valueOf(bill.getNameShoe()).contains(String.valueOf(s))) {
+//                                templist.add(bill);
+//                            }
                         }
                         adapter = new BillAdapter(getContext(), templist, functionInterface);
                         binding.rvBill.setAdapter(adapter);
@@ -134,7 +134,6 @@ public class BillFragment extends Fragment implements BillAdapter.functionInterf
                                 try {
                                     Bill item = new Bill(
                                             document.getId(),
-                                            document.getString("nameShoe"),
                                             document.getLong("price").intValue(),
                                             document.getString("nameCustomer"),
                                             document.getString("phone"),

@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 public class Bill {
     private String id;
-    private String nameShoe;
     private int price;
     private String nameCustomer;
     private String phone;
@@ -17,9 +16,8 @@ public class Bill {
     public Bill() {
     }
 
-    public Bill(String id, String nameShoe, int price, String nameCustomer, String phone, String address, Date date, int status) {
+    public Bill(String id, int price, String nameCustomer, String phone, String address, Date date, int status) {
         this.id = id;
-        this.nameShoe = nameShoe;
         this.price = price;
         this.nameCustomer = nameCustomer;
         this.phone = phone;
@@ -34,14 +32,6 @@ public class Bill {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getNameShoe() {
-        return nameShoe;
-    }
-
-    public void setNameShoe(String nameShoe) {
-        this.nameShoe = nameShoe;
     }
 
     public int getPrice() {
@@ -93,10 +83,9 @@ public class Bill {
     }
 
     public HashMap<String, Object> convertHashMap() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         HashMap<String, Object> bill = new HashMap<>();
         bill.put("id", id);
-        bill.put("nameShoe", nameShoe);
         bill.put("price", price);
         bill.put("nameCustomer", nameCustomer);
         bill.put("phone", phone);

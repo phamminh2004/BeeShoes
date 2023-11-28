@@ -37,7 +37,7 @@ public class Login extends AppCompatActivity {
         binding.tvPasswordRecovery.setOnClickListener(v -> {
             startActivity(new Intent(Login.this, PasswordRecovery.class));
         });
-        binding.tvLogin.setOnClickListener(v -> {
+        binding.tvReg.setOnClickListener(v -> {
             startActivity(new Intent(Login.this, Register.class));
         });
     }
@@ -68,14 +68,13 @@ public class Login extends AppCompatActivity {
                                                 String role = documentSnapshot.getString("role");
                                                 if ("manager".equals(role)) {
                                                     intent.putExtra("role", "manager");
-                                                    startActivity(intent);
                                                 } else if ("employee".equals(role)) {
                                                     intent.putExtra("role", "employee");
-                                                    startActivity(intent);
-                                                }else {
-                                                    intent.putExtra("role", "customer");
-                                                    startActivity(intent);
+                                                } else {
+                                                    intent.putExtra("role", "customer");                                                startActivity(intent);
                                                 }
+                                                startActivity(intent);
+                                                finish();
                                             }
                                         })
                                         .addOnFailureListener(e -> {

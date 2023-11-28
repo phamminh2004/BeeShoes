@@ -1,6 +1,8 @@
 package fpoly.mds.beeshoes.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,35 @@ public class HomeCustomerFragment extends Fragment implements HomeAdapter.functi
         });
         binding.btnCart.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CartFragment()).addToBackStack(null).commit();
+        });
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<Shoe> templist = new ArrayList<>();
+                try {
+                    if (s.toString().trim() != "") {
+                        for (Shoe shoe : list) {
+                            if (String.valueOf(shoe.getName()).contains(String.valueOf(s))) {
+                                templist.add(shoe);
+                            }
+                        }
+                        adapter = new HomeAdapter(getContext(), templist, functionInterface);
+                        binding.rvShoe.setAdapter(adapter);
+                    }
+                } catch (Exception e) {
+                    Log.e("TAG", "Lỗi tìm kiếm" + e.getMessage());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
         return binding.getRoot();
     }
