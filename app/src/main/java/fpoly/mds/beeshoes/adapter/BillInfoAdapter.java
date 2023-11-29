@@ -18,13 +18,13 @@ import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.ItemOrderBinding;
 import fpoly.mds.beeshoes.model.Cart;
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
+public class BillInfoAdapter extends RecyclerView.Adapter<BillInfoAdapter.ViewHolder> {
 
     private final Context context;
     private final ArrayList<Cart> list;
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
-    public OrderAdapter(Context context, ArrayList<Cart> list) {
+    public BillInfoAdapter(Context context, ArrayList<Cart> list) {
         this.context = context;
         this.list = list;
     }
@@ -43,7 +43,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.binding.tvPrice.setText("đ" + decimalFormat.format(cart.getPrice()));
         holder.binding.tvColor.setText(cart.getColor());
         holder.binding.tvSize.setText("Size: " + cart.getSize());
-        holder.binding.tvQuantity.setText("SL: "+cart.getQuantity());
+        holder.binding.tvQuantity.setText("SL: " + cart.getQuantity());
         String img = cart.getImg();
         try {
             Picasso.get().load(img).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera)
@@ -57,7 +57,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public int getItemCount() {
         return list.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemOrderBinding binding;

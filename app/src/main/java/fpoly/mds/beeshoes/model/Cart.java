@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Cart {
     private String id;
+    private String userId;
     private String img;
     private String name;
     private int price;
@@ -14,8 +15,9 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(String id, String img, String name, int price, String color, int size, int quantity) {
+    public Cart(String id, String userId,String img, String name, int price, String color, int size, int quantity) {
         this.id = id;
+        this.userId= userId;
         this.img = img;
         this.name = name;
         this.price = price;
@@ -30,6 +32,14 @@ public class Cart {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getImg() {
@@ -83,6 +93,7 @@ public class Cart {
     public HashMap<String, Object> convertHashMap() {
         HashMap<String, Object> cart = new HashMap<>();
         cart.put("id", id);
+        cart.put("userId", userId);
         cart.put("img", img);
         cart.put("name", name);
         cart.put("price", price);

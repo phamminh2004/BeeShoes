@@ -6,22 +6,24 @@ import java.util.HashMap;
 
 public class Bill {
     private String id;
-    private int price;
+    private String userId;
     private String nameCustomer;
-    private String phone;
     private String address;
+    private String phone;
+    private int price;
     private Date date;
     private int status;
 
     public Bill() {
     }
 
-    public Bill(String id, int price, String nameCustomer, String phone, String address, Date date, int status) {
+    public Bill(String id, String userId, String nameCustomer, String address, String phone, int price, Date date, int status) {
         this.id = id;
-        this.price = price;
+        this.userId = userId;
         this.nameCustomer = nameCustomer;
-        this.phone = phone;
         this.address = address;
+        this.phone = phone;
+        this.price = price;
         this.date = date;
         this.status = status;
     }
@@ -34,12 +36,12 @@ public class Bill {
         this.id = id;
     }
 
-    public int getPrice() {
-        return price;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getNameCustomer() {
@@ -50,6 +52,14 @@ public class Bill {
         this.nameCustomer = nameCustomer;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -58,12 +68,12 @@ public class Bill {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public int getPrice() {
+        return price;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public Date getDate() {
@@ -86,10 +96,11 @@ public class Bill {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         HashMap<String, Object> bill = new HashMap<>();
         bill.put("id", id);
-        bill.put("price", price);
+        bill.put("userId", userId);
         bill.put("nameCustomer", nameCustomer);
-        bill.put("phone", phone);
         bill.put("address", address);
+        bill.put("phone", phone);
+        bill.put("price", price);
         bill.put("date", sdf.format(date));
         bill.put("status", status);
         return bill;

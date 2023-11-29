@@ -13,7 +13,7 @@
         android:background="@drawable/custom_edt"
         android:drawableEnd="@drawable/ic_search"
         android:drawablePadding="15dp"
-        android:hint="Tìm kiêm hóa đơn"
+        android:hint="Tìm kiêm đơn hàng"
         android:padding="15dp" />
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="DANH SÁCH HÓA ĐƠN"
+            android:text="DANH SÁCH ĐƠN HÀNG"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -36,15 +36,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="#EB5757"
-        android:src="@drawable/ic_add_1" />
 
 </FrameLayout>

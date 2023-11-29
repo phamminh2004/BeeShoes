@@ -11,6 +11,9 @@
         android:icon="@drawable/ic_home"
         android:title="Trang chủ"
         android:visible="false" />
+    <item
+        android:id="@+id/order"
+        android:title="Đã đặt" />
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/manage"

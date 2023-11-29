@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal"
-    android:layout_marginVertical="2dp"
-    android:background="@drawable/custom_background_item"
-    android:padding="10dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.BillInfoFragment">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="16"
-        android:orientation="vertical">
+        android:background="@drawable/custom_background_item"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/tv_id"
@@ -27,9 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:textStyle="bold"
-            android:text="Tên khách hàng: John"
-            android:textSize="20sp" />
+            android:text="Tên: John"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_price"
@@ -39,6 +38,7 @@
             android:text="Giá: đ1,290,000"
             android:textSize="16sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tv_phone"
             android:layout_width="match_parent"
@@ -70,7 +70,12 @@
             android:layout_weight="6"
             android:text="Trạng thái: Đã thanh toán"
             android:textSize="16sp" />
-
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_shoes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:padding="8dp" />
 </LinearLayout>

@@ -55,7 +55,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         String id = cart.getId();
         quantity = cart.getQuantity();
         holder.binding.tvName.setText(cart.getName());
-        holder.binding.tvPrice.setText(decimalFormat.format(cart.getPrice()) + "VND");
+        holder.binding.tvPrice.setText("đ" + decimalFormat.format(cart.getPrice()));
         holder.binding.tvColor.setText(cart.getColor());
         holder.binding.tvSize.setText("Size: " + cart.getSize());
         holder.binding.tvQuantity.setText(cart.getQuantity() + "");
@@ -75,7 +75,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         quantity--;
                         price = shoe.getPrice() * quantity;
                         holder.binding.tvQuantity.setText(quantity + "");
-                        holder.binding.tvPrice.setText(decimalFormat.format(price) + "VND");
+                        holder.binding.tvPrice.setText("đ"+decimalFormat.format(price));
                         functionInterface.updateData();
                         updateFirebase(id);
                     }
@@ -95,7 +95,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     quantity++;
                     price = shoe.getPrice() * quantity;
                     holder.binding.tvQuantity.setText(quantity + "");
-                    holder.binding.tvPrice.setText(decimalFormat.format(price) + "VND");
+                    holder.binding.tvPrice.setText("đ"+decimalFormat.format(price));
                     functionInterface.updateData();
                     updateFirebase(id);
                 }

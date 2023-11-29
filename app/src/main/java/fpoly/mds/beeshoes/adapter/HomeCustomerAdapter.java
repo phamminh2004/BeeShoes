@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -21,13 +23,13 @@ import fpoly.mds.beeshoes.databinding.ItemProductBinding;
 import fpoly.mds.beeshoes.model.Cart;
 import fpoly.mds.beeshoes.model.Shoe;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+public class HomeCustomerAdapter extends RecyclerView.Adapter<HomeCustomerAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<Shoe> list;
     private final functionInterface functionInterface;
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
-    public HomeAdapter(Context context, ArrayList<Shoe> list, functionInterface functionInterface) {
+    public HomeCustomerAdapter(Context context, ArrayList<Shoe> list, functionInterface functionInterface) {
         this.context = context;
         this.list = list;
         this.functionInterface = functionInterface;
@@ -56,6 +58,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             functionInterface.click(item.getId());
         });
         holder.binding.btnAdd.setOnClickListener(v -> {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = auth.getCurrentUser();
+            String userId = currentUser.getUid();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String id = item.getId();
             String name = item.getName();
@@ -63,7 +68,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             int quantity = 1;
             int size = item.getSize();
             int price = item.getPrice();
-            Cart cart = new Cart(id, img, name, price, color, size, quantity);
+            Cart cart = new Cart(id, userId, img, name, price, color, size, quantity);
             HashMap<String, Object> hashMap = cart.convertHashMap();
             db.collection("Cart").document(id).set(hashMap)
                     .addOnSuccessListener(unused -> {

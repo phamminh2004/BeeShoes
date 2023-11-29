@@ -16,12 +16,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.fragment.AddAccountFragment;
-import fpoly.mds.beeshoes.fragment.BillFragment;
 import fpoly.mds.beeshoes.fragment.ChangePasswordFragment;
 import fpoly.mds.beeshoes.fragment.CustomerFragment;
 import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeCustomerFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
+import fpoly.mds.beeshoes.fragment.BillFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
 import fpoly.mds.beeshoes.fragment.ShoesFragment;
 import fpoly.mds.beeshoes.fragment.WorkFragment;
@@ -93,15 +93,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.work) {
             setTitle("Công việc");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).addToBackStack(null).commit();
-        } else if (item.getItemId() == R.id.bill) {
-            setTitle("Hóa đơn");
-            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.customer) {
             setTitle("Khách hàng");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.homeCustomer) {
             setTitle("Khách hàng");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).addToBackStack(null).commit();
+        } else if (item.getItemId() == R.id.order) {
+            setTitle("Khách hàng");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
         }
         drawer.close();
         return false;

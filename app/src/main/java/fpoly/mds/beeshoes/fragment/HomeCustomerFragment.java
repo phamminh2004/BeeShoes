@@ -22,16 +22,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.adapter.HomeAdapter;
+import fpoly.mds.beeshoes.adapter.HomeCustomerAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentHomeCustomerBinding;
 import fpoly.mds.beeshoes.model.Shoe;
 
-public class HomeCustomerFragment extends Fragment implements HomeAdapter.functionInterface {
+public class HomeCustomerFragment extends Fragment implements HomeCustomerAdapter.functionInterface {
     FragmentHomeCustomerBinding binding;
     FirebaseFirestore db;
-    HomeAdapter adapter;
+    HomeCustomerAdapter adapter;
     ArrayList<Shoe> list = new ArrayList<>();
-    private HomeAdapter.functionInterface functionInterface;
+    private HomeCustomerAdapter.functionInterface functionInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,9 +43,6 @@ public class HomeCustomerFragment extends Fragment implements HomeAdapter.functi
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rvShoe.setLayoutManager(manager);
         loadData();
-        binding.rvShoe.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ProductInfoFragment()).addToBackStack(null).commit();
-        });
         binding.btnCart.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CartFragment()).addToBackStack(null).commit();
         });
@@ -65,7 +62,7 @@ public class HomeCustomerFragment extends Fragment implements HomeAdapter.functi
                                 templist.add(shoe);
                             }
                         }
-                        adapter = new HomeAdapter(getContext(), templist, functionInterface);
+                        adapter = new HomeCustomerAdapter(getContext(), templist, functionInterface);
                         binding.rvShoe.setAdapter(adapter);
                     }
                 } catch (Exception e) {
@@ -116,7 +113,7 @@ public class HomeCustomerFragment extends Fragment implements HomeAdapter.functi
 
     private void loadData() {
         list = getAllList();
-        adapter = new HomeAdapter(getContext(), list, functionInterface);
+        adapter = new HomeCustomerAdapter(getContext(), list, functionInterface);
         binding.rvShoe.setAdapter(adapter);
     }
 

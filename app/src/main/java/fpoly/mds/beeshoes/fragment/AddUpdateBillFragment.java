@@ -165,16 +165,16 @@ public class AddUpdateBillFragment extends Fragment {
                 .addOnSuccessListener(document -> {
                     if (document.exists()) {
                         try {
-                            Bill bill = new Bill(
-                                    document.getId(),
-                                    document.getLong("price").intValue(),
-                                    document.getString("nameCustomer"),
-                                    document.getString("phone"),
-                                    document.getString("address"),
-                                    sdf.parse(document.getString("date")),
-                                    document.getLong("status").intValue()
-                            );
-                            callback.onBillLoaded(bill);
+//                            Bill bill = new Bill(
+//                                    document.getId(),
+//                                    document.getLong("price").intValue(),
+//                                    document.getString("nameCustomer"),
+//                                    document.getString("phone"),
+//                                    document.getString("address"),
+//                                    sdf.parse(document.getString("date")),
+//                                    document.getLong("status").intValue()
+//                            );
+//                            callback.onBillLoaded(bill);
                         } catch (Exception e) {
 
                         }
@@ -190,19 +190,19 @@ public class AddUpdateBillFragment extends Fragment {
     }
 
     private void uploadFirestoreData() {
-        try {
-            Bill bill = new Bill(id, Integer.parseInt(strPrice), nameCustomer, phone, address, sdf.parse(date), status);
-            HashMap<String, Object> hashMap = bill.convertHashMap();
-            db.collection("Bill").document(id).set(hashMap).
-                    addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
-                        }
-                    });
-            uploadCustomer();
-        } catch (Exception e) {}
+//        try {
+//            Bill bill = new Bill(id, Integer.parseInt(strPrice), nameCustomer, phone, address, sdf.parse(date), status);
+//            HashMap<String, Object> hashMap = bill.convertHashMap();
+//            db.collection("Bill").document(id).set(hashMap).
+//                    addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void unused) {
+//                            Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+//                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
+//                        }
+//                    });
+//            uploadCustomer();
+//        } catch (Exception e) {}
     }
     private void saveCustomerData(){
         Customer customer = new Customer(id,nameCustomer, address, phone);

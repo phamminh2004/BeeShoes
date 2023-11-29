@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,10 +79,13 @@ public class ProductInfoFragment extends Fragment {
                     });
                     price = Integer.parseInt(binding.tvQuantity.getText().toString()) * shoe.getPrice();
                     binding.btnAdd.setOnClickListener(v -> {
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        FirebaseUser currentUser = auth.getCurrentUser();
+                        String userId = currentUser.getUid();
                         name = shoe.getName();
                         color = shoe.getColor();
                         size = shoe.getSize();
-                        Cart cart = new Cart(id, img, name, price, color, size, quantity);
+                        Cart cart = new Cart(id, userId, img, name, price, color, size, quantity);
                         HashMap<String, Object> hashMap = cart.convertHashMap();
                         db.collection("Cart").document(id).set(hashMap)
                                 .addOnSuccessListener(unused -> {

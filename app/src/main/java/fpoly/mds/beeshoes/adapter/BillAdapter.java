@@ -1,22 +1,24 @@
 package fpoly.mds.beeshoes.adapter;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import fpoly.mds.beeshoes.R;
-import fpoly.mds.beeshoes.databinding.DialogFunctionBinding;
 import fpoly.mds.beeshoes.databinding.ItemBillBinding;
 import fpoly.mds.beeshoes.model.Bill;
 
@@ -26,6 +28,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private final functionInterface functionInterface;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
+    int status;
 
     public BillAdapter(Context context, ArrayList<Bill> list, functionInterface functionInterface) {
         this.context = context;
@@ -49,17 +52,38 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());
         holder.binding.tvPhone.setText("SĐT: " + item.getPhone());
         holder.binding.tvDate.setText("Ngày đặt: " + sdf.format(item.getDate()));
+        try {
+            Date currentDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(item.getDate());
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            Date datePlus1 = cal.getTime();
+            if (datePlus1.before(currentDate)) {
+                status = 1;
+                holder.binding.tvStatus.setText("Đã thanh toán");
+                holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
 
-        if (item.getStatus() == 0) {
-            holder.binding.tvStatus.setText("Chưa thanh toán");
-            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
-        } else {
-            holder.binding.tvStatus.setText("Đã thanh toán");
-            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
+                updateFirebase(item.getId());
+            } else {
+                holder.binding.tvStatus.setText("Chưa thanh toán");
+                holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+            }
+        } catch (Exception e) {
+
         }
+        holder.itemView.setOnClickListener(v -> {
+            functionInterface.click(item.getId());
+        });
+    }
 
-        holder.binding.btnFuncion.setOnClickListener(v -> {
-            openDialogChucNang(item.getId());
+    private void updateFirebase(String id) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+        db.collection("Bill").document(id).update(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+            }
         });
     }
 
@@ -68,34 +92,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         return list.size();
     }
 
-    private void openDialogChucNang(String id) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        DialogFunctionBinding binding = DialogFunctionBinding.inflate(inflater);
-        View view = binding.getRoot();
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(view);
-        dialog.show();
-        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                functionInterface.update(id);
-                dialog.dismiss();
-            }
-        });
-
-        binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                functionInterface.delete(id);
-                dialog.dismiss();
-            }
-        });
-    }
-
     public interface functionInterface {
-        void update(String id);
-
-        void delete(String id);
+        void click(String id);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

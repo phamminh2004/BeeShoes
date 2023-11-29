@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -53,7 +56,11 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
 
     private void getAllList(FirestoreCallback callback) {
         ArrayList<Cart> list = new ArrayList<>();
-        db.collection("Cart")
+        CollectionReference collectionReference = db.collection("Cart");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        collectionReference.whereEqualTo("userId", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -61,23 +68,15 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
                         list.clear();
                         price = 0;
                         if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (QueryDocumentSnapshot document : querySnapshot) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Cart cart = document.toObject(Cart.class);
+                                price += cart.getPrice();
+                                list.add(cart);
                                 Log.d("TAG", document.getId() + " => " + document.getData());
-                                Cart item = new Cart(
-                                        document.getString("id"),
-                                        document.getString("img"),
-                                        document.getString("name"),
-                                        document.getLong("price").intValue(),
-                                        document.getString("color"),
-                                        document.getLong("size").intValue(),
-                                        document.getLong("quantity").intValue());
-                                price += item.getPrice();
-                                list.add(item);
                             }
                             callback.onCallback(list);
                         } else {
-                            Log.d("TAG", "Error getting documents: " + task.getException());
+                            Log.w("TAG", "Lỗi khi truy vấn dữ liệu", task.getException());
                         }
                     }
                 });
@@ -89,7 +88,7 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
             public void onCallback(ArrayList<Cart> list) {
                 adapter = new CartAdapter(getContext(), list, functionInterface);
                 binding.rvProduct.setAdapter(adapter);
-                binding.tvPrice.setText(decimalFormat.format(price) + "VND");
+                binding.tvPrice.setText("đ" + decimalFormat.format(price));
             }
         });
     }
@@ -101,7 +100,7 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
             public void onCallback(ArrayList<Cart> list) {
                 adapter = new CartAdapter(getContext(), list, functionInterface);
                 binding.rvProduct.setAdapter(adapter);
-                binding.tvPrice.setText(decimalFormat.format(price) + "VND");
+                binding.tvPrice.setText("đ" + decimalFormat.format(price));
             }
         });
     }

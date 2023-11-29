@@ -14,27 +14,37 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.UUID;
 
 import fpoly.mds.beeshoes.adapter.OrderAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentOrderBinding;
+import fpoly.mds.beeshoes.model.Bill;
 import fpoly.mds.beeshoes.model.Cart;
+
 
 public class OrderFragment extends Fragment {
     private final String REGEX_PHONE_NUMBER = "^[0-9\\-\\+]{9,15}$";
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
     FragmentOrderBinding binding;
     FirebaseFirestore db;
     OrderAdapter adapter;
     ArrayList<Cart> list;
-    int price;
-    String nameCustomer, address, phone;
-    DecimalFormat decimalFormat = new DecimalFormat("#,###");
+    int price, totalPrice;
+    String nameCustomer, address, phone, id, userId;
+    Date currentDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,27 +52,73 @@ public class OrderFragment extends Fragment {
         binding = FragmentOrderBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<>();
+        currentDate = new Date();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        userId = currentUser.getUid();
+        id = UUID.randomUUID().toString();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvProduct.setLayoutManager(manager);
         loadData();
         binding.tvSubmit.setOnClickListener(v -> {
-        nameCustomer = binding.edtNameCustomer.getText().toString();
-        address = binding.edtAddress.getText().toString();
-        phone = binding.edtPhone.getText().toString();
+            nameCustomer = binding.edtNameCustomer.getText().toString();
+            address = binding.edtAddress.getText().toString();
+            phone = binding.edtPhone.getText().toString();
+            totalPrice = price + 30000;
             if (TextUtils.isEmpty(nameCustomer) || TextUtils.isEmpty(address) || TextUtils.isEmpty(phone)) {
                 Toast.makeText(getContext(), "Vui lòng nhập đủ thông tin", Toast.LENGTH_SHORT).show();
             } else if (!phone.matches(REGEX_PHONE_NUMBER)) {
                 Toast.makeText(getContext(), "Số điện thoại sai định dạng", Toast.LENGTH_SHORT).show();
             } else {
-
+                saveData();
+                updateFirebase();
+                deleteData();
             }
         });
         return binding.getRoot();
     }
 
-    private void getAllList(CartFragment.FirestoreCallback callback) {
-        db.collection("Cart")
+    private void saveData() {
+        try {
+            Bill bill = new Bill(id, userId, nameCustomer, address, phone, totalPrice, currentDate, 0);
+            HashMap<String, Object> hashMap1 = bill.convertHashMap();
+            db.collection("Bill").document(id).set(hashMap1).
+                    addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } catch (Exception e) {
+            Log.e("loi firebase", e.getMessage());
+        }
+    }
+
+    private void deleteData() {
+        CollectionReference collectionReference = db.collection("Cart");
+        collectionReference.whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                document.getReference().delete();
+                            }
+                            Log.d("TAG", "Xóa dữ liệu thành công.");
+                        } else {
+                            Log.w("TAG", "Lỗi khi truy vấn dữ liệu", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    private void getAllList(FirestoreCallback callback) {
+        ArrayList<Cart> list = new ArrayList<>();
+        CollectionReference collectionReference = db.collection("Cart");
+        collectionReference.whereEqualTo("userId", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -70,31 +126,53 @@ public class OrderFragment extends Fragment {
                         list.clear();
                         price = 0;
                         if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (QueryDocumentSnapshot document : querySnapshot) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Cart cart = document.toObject(Cart.class);
+                                price += cart.getPrice();
+                                list.add(cart);
                                 Log.d("TAG", document.getId() + " => " + document.getData());
-                                Cart item = new Cart(
-                                        document.getString("id"),
-                                        document.getString("img"),
-                                        document.getString("name"),
-                                        document.getLong("price").intValue(),
-                                        document.getString("color"),
-                                        document.getLong("size").intValue(),
-                                        document.getLong("quantity").intValue());
-                                price += item.getPrice();
-                                list.add(item);
                             }
                             callback.onCallback(list);
                         } else {
-                            Log.d("TAG", "Error getting documents: " + task.getException());
+                            Log.w("TAG", "Lỗi khi truy vấn dữ liệu", task.getException());
                         }
                     }
                 });
     }
 
+    private void updateFirebase() {
+        ArrayList<Cart> list = new ArrayList<>();
+        CollectionReference collectionReference = db.collection("Cart");
+        collectionReference.whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        list.clear();
+                        price = 0;
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String uid = UUID.randomUUID().toString();
+                                Cart cart = document.toObject(Cart.class);
+                                cart.setId(id);
+                                HashMap<String, Object> hashMap = cart.convertHashMap();
+                                db.collection("BillInfo").document(uid).set(hashMap).
+                                        addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w("TAG", "Lỗi khi truy vấn dữ liệu", task.getException());
+                        }
+                    }
+                });
+    }
 
     private void loadData() {
-        getAllList(new CartFragment.FirestoreCallback() {
+        getAllList(new FirestoreCallback() {
             @Override
             public void onCallback(ArrayList<Cart> list) {
                 adapter = new OrderAdapter(getContext(), list);
@@ -105,5 +183,9 @@ public class OrderFragment extends Fragment {
                 binding.tvTotal.setText("đ" + decimalFormat.format(totalPrice));
             }
         });
+    }
+
+    public interface FirestoreCallback {
+        void onCallback(ArrayList<Cart> list);
     }
 }
