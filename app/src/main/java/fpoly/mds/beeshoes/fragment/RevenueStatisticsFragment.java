@@ -47,7 +47,7 @@ public class RevenueStatisticsFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        FirebaseFirestore.getInstance().collection("Bill")
+        FirebaseFirestore.getInstance().collection("Bill").whereEqualTo("status",1)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
