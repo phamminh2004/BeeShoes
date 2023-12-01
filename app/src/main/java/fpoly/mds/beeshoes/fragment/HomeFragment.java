@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.graphics.BitmapKt;
 import androidx.fragment.app.Fragment;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.FragmentHomeBinding;
+import fpoly.mds.beeshoes.model.Bill;
 
 public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
@@ -33,7 +35,14 @@ public class HomeFragment extends Fragment {
             getActivity().setTitle("Công việc");
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new WorkFragment()).commit();
         });
-
+        binding.tvBill.setOnClickListener(v -> {
+            getActivity().setTitle("Hóa đơn");
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).commit();
+        });
+        binding.tvStatistic.setOnClickListener(v -> {
+            getActivity().setTitle("Thống kê doanh thu");
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new RevenueStatisticsFragment()).commit();
+        });
         return binding.getRoot();
     }
 }

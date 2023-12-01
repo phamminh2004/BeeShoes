@@ -107,11 +107,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             });
         });
         holder.binding.btnDelete.setOnClickListener(v -> {
+            db = FirebaseFirestore.getInstance();
             list.remove(position);
             notifyDataSetChanged();
             db.collection("Cart").document(cart.getId()).delete().addOnSuccessListener(command -> {
                 Toast.makeText(context, "Xoá thành công", Toast.LENGTH_SHORT).show();
             });
+            functionInterface.updateData();
         });
     }
 
@@ -169,6 +171,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     public interface functionInterface {
         void updateData();
+//        void delete(String id);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

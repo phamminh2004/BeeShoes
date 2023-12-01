@@ -22,6 +22,7 @@ import fpoly.mds.beeshoes.fragment.EmployeeFragment;
 import fpoly.mds.beeshoes.fragment.HomeCustomerFragment;
 import fpoly.mds.beeshoes.fragment.HomeFragment;
 import fpoly.mds.beeshoes.fragment.BillFragment;
+import fpoly.mds.beeshoes.fragment.RevenueStatisticsFragment;
 import fpoly.mds.beeshoes.fragment.ShoeTypeFragment;
 import fpoly.mds.beeshoes.fragment.ShoesFragment;
 import fpoly.mds.beeshoes.fragment.WorkFragment;
@@ -55,14 +56,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if ("manager".equals(role)) {
             nv.getMenu().findItem(R.id.addAccount).setVisible(true);
+            nv.getMenu().findItem(R.id.order).setVisible(false);
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
         } else if (role.equals("employee")) {
+            nv.getMenu().findItem(R.id.order).setVisible(false);
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).commit();
         } else {
             nv.getMenu().findItem(R.id.homeManage).setVisible(false);
             nv.getMenu().findItem(R.id.manage).setVisible(false);
             nv.getMenu().findItem(R.id.statistic).setVisible(false);
             nv.getMenu().findItem(R.id.homeCustomer).setVisible(true);
+            nv.getMenu().findItem(R.id.bill).setVisible(true);
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).commit();
         }
     }
@@ -97,11 +101,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setTitle("Khách hàng");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new CustomerFragment()).addToBackStack(null).commit();
         } else if (item.getItemId() == R.id.homeCustomer) {
-            setTitle("Khách hàng");
+            setTitle("Trang chủ");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeCustomerFragment()).addToBackStack(null).commit();
-        } else if (item.getItemId() == R.id.order) {
-            setTitle("Khách hàng");
+        } else if (item.getItemId() == R.id.bill) {
+            setTitle("Hóa đơn");
             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
+        }else if (item.getItemId() == R.id.order) {
+            setTitle("Đơn hàng");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
+        }else if (item.getItemId() == R.id.revenue) {
+            setTitle("Thống kê doanh thu");
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new RevenueStatisticsFragment()).addToBackStack(null).commit();
         }
         drawer.close();
         return false;

@@ -44,7 +44,7 @@ public class ShoesAdapter extends RecyclerView.Adapter<ShoesAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Shoe item = list.get(position);
         holder.binding.tvName.setText(item.getName());
-        holder.binding.tvPrice.setText("Giá: " + decimalFormat.format(item.getPrice()) + "VND");
+        holder.binding.tvPrice.setText("Giá: đ" + decimalFormat.format(item.getPrice()));
         holder.binding.tvShoeType.setText("Hãng: " + item.getShoeType());
         holder.binding.tvColor.setText("Màu sắc: " + item.getColor());
         holder.binding.tvSize.setText("Size: " + item.getSize());

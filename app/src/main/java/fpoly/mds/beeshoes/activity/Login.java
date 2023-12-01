@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,7 @@ public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
     FirebaseFirestore database;
     FirebaseAuth auth;
-
+    private ProgressBar loadingProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +54,13 @@ public class Login extends AppCompatActivity {
             binding.edtPassword.setError("Nhập mật khẩu");
             binding.edtPassword.requestFocus();
         } else {
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
+
             auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             rememberUser(email, password, binding.chkCheckPass.isChecked());
                             Intent intent = new Intent(Login.this, MainActivity.class);
-                            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             FirebaseUser currentUser = auth.getCurrentUser();
                             if (currentUser != null) {
                                 String userId = currentUser.getUid();
@@ -74,6 +77,7 @@ public class Login extends AppCompatActivity {
                                                     intent.putExtra("role", "customer");                                                startActivity(intent);
                                                 }
                                                 startActivity(intent);
+                                                binding.loadingProgressBar.setVisibility(View.GONE);
                                                 finish();
                                             }
                                         })

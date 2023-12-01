@@ -13,7 +13,8 @@
         android:visible="false" />
     <item
         android:id="@+id/order"
-        android:title="Đã đặt" />
+        android:icon="@drawable/ic_bill"
+        android:title="Đơn hàng đã mua" />
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/manage"
@@ -52,13 +53,9 @@
             android:title="Thống kê">
             <menu>
                 <item
-                    android:id="@+id/top"
-                    android:icon="@drawable/ic_top"
-                    android:title="Top 10 giày bán chạy nhất" />
-                <item
                     android:id="@+id/revenue"
                     android:icon="@drawable/ic_money"
-                    android:title="Doanh thu" />
+                    android:title="Thống kê doanh thu" />
             </menu>
         </item>
     </group>

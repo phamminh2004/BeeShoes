@@ -25,7 +25,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     private final Context context;
     private final ArrayList<Employee> list;
     private final functionInterface functionInterface;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public EmployeeAdapter(Context context, ArrayList<Employee> list, functionInterface functionInterface) {
         this.context = context;

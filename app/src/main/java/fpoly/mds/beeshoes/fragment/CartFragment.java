@@ -79,6 +79,8 @@ public class CartFragment extends Fragment implements CartAdapter.functionInterf
                             Log.w("TAG", "Lỗi khi truy vấn dữ liệu", task.getException());
                         }
                     }
+                }).addOnFailureListener(command -> {
+                    price = 0;
                 });
     }
 

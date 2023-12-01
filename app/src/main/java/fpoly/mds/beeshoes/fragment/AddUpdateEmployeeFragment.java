@@ -42,7 +42,7 @@ import fpoly.mds.beeshoes.model.Employee;
 public class AddUpdateEmployeeFragment extends Fragment {
     private final String REGEX_PHONE_NUMBER = "^[0-9\\-\\+]{9,15}$";
     private final String REGEX_DATE = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\\d{4}$";
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     FragmentAddUpdateEmployeeBinding binding;
     FirebaseFirestore db;
     FirebaseStorage storage;

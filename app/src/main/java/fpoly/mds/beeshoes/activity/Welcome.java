@@ -20,6 +20,6 @@ public class Welcome extends AppCompatActivity {
                 startActivity(new Intent(Welcome.this, Login.class));
                 finish();
             }
-        }, 2000);
+        }, 3000);
     }
 }

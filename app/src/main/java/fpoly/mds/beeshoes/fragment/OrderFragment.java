@@ -29,10 +29,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.adapter.OrderAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentOrderBinding;
 import fpoly.mds.beeshoes.model.Bill;
 import fpoly.mds.beeshoes.model.Cart;
+import fpoly.mds.beeshoes.model.Customer;
 
 
 public class OrderFragment extends Fragment {
@@ -72,8 +74,6 @@ public class OrderFragment extends Fragment {
                 Toast.makeText(getContext(), "Số điện thoại sai định dạng", Toast.LENGTH_SHORT).show();
             } else {
                 saveData();
-                updateFirebase();
-                deleteData();
             }
         });
         return binding.getRoot();
@@ -82,20 +82,37 @@ public class OrderFragment extends Fragment {
     private void saveData() {
         try {
             Bill bill = new Bill(id, userId, nameCustomer, address, phone, totalPrice, currentDate, 0);
-            HashMap<String, Object> hashMap1 = bill.convertHashMap();
-            db.collection("Bill").document(id).set(hashMap1).
+            HashMap<String, Object> hashMap = bill.convertHashMap();
+            db.collection("Bill").document(id).set(hashMap).
                     addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
                         }
                     });
+            uploadBillInfo();
+            upLoadCustomer();
+            deleteDataCart();
         } catch (Exception e) {
             Log.e("loi firebase", e.getMessage());
         }
     }
 
-    private void deleteData() {
+    private void upLoadCustomer() {
+        Customer customer = new Customer(userId, nameCustomer, address, phone);
+        HashMap<String, Object> hashMap = customer.converHashMap();
+        db.collection("Customer").document(userId).set(hashMap).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new BillFragment()).addToBackStack(null).commit();
+                    }
+                });
+    }
+
+    private void deleteDataCart() {
         CollectionReference collectionReference = db.collection("Cart");
         collectionReference.whereEqualTo("userId", userId)
                 .get()
@@ -140,7 +157,7 @@ public class OrderFragment extends Fragment {
                 });
     }
 
-    private void updateFirebase() {
+    private void uploadBillInfo() {
         ArrayList<Cart> list = new ArrayList<>();
         CollectionReference collectionReference = db.collection("Cart");
         collectionReference.whereEqualTo("userId", userId)

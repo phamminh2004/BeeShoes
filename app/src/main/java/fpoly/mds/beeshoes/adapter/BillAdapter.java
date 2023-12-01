@@ -47,8 +47,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Bill item = list.get(position);
         holder.binding.tvId.setText("ID: " + item.getId());
-        holder.binding.tvPrice.setText("Giá: " + decimalFormat.format(item.getPrice()) + "VND");
-        holder.binding.tvNameCustomer.setText("Tên khách hàng: " + item.getNameCustomer());
+        holder.binding.tvPrice.setText("Giá: đ" + decimalFormat.format(item.getPrice()));
+        holder.binding.tvNameCustomer.setText("Họ tên: " + item.getNameCustomer());
         holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());
         holder.binding.tvPhone.setText("SĐT: " + item.getPhone());
         holder.binding.tvDate.setText("Ngày đặt: " + sdf.format(item.getDate()));

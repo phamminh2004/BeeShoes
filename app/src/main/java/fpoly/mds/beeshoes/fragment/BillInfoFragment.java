@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -26,6 +27,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.adapter.BillInfoAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentBillInfoBinding;
 import fpoly.mds.beeshoes.model.Bill;
@@ -52,23 +54,23 @@ public class BillInfoFragment extends Fragment {
             getID(id, new BillCallback() {
                 @Override
                 public void onBillLoaded(Bill bill) {
-                    binding.tvId.setText(bill.getId());
-                    binding.tvNameCustomer.setText(bill.getNameCustomer());
-                    binding.tvPrice.setText("đ" + decimalFormat.format(bill.getPrice()));
-                    binding.tvPhone.setText(bill.getPhone());
-                    binding.tvAddress.setText(bill.getAddress());
-                    binding.tvDate.setText(sdf.format(bill.getDate()));
+                    binding.tvId.setText("ID: " + bill.getId());
+                    binding.tvNameCustomer.setText("Họ tên: " + bill.getNameCustomer());
+                    binding.tvPrice.setText("Giá: đ" + decimalFormat.format(bill.getPrice()));
+                    binding.tvPhone.setText("SĐT: " + bill.getPhone());
+                    binding.tvAddress.setText("Địa chỉ: " + bill.getAddress());
+                    binding.tvDate.setText("Ngày đặt hàng: " + sdf.format(bill.getDate()));
                     if (bill.getStatus() == 0) {
                         binding.tvStatus.setText("Chưa thanh toán");
+                        binding.tvStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                     } else {
                         binding.tvStatus.setText("Đã thanh toán");
+                        binding.tvStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                     }
-
                     LinearLayoutManager manager = new LinearLayoutManager(getContext());
                     manager.setOrientation(LinearLayoutManager.VERTICAL);
                     binding.rvShoes.setLayoutManager(manager);
                     loadData();
-
                 }
 
                 @Override

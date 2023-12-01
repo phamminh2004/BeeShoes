@@ -3,6 +3,8 @@ package fpoly.mds.beeshoes.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +23,7 @@ public class Register extends AppCompatActivity {
     FirebaseFirestore database;
     FirebaseAuth auth;
     String REGEX_EMAIL = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
+    private ProgressBar loadingProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,7 @@ public class Register extends AppCompatActivity {
             binding.edtRePassword.setError("Mật khẩu không trùng khớp");
             binding.edtRePassword.requestFocus();
         } else {
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     User user1 = new User(email, "customer");
@@ -70,6 +73,7 @@ public class Register extends AppCompatActivity {
                         }
                     });
                     startActivity(new Intent(Register.this, Login.class));
+                    binding.loadingProgressBar.setVisibility(View.GONE);
                     Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
