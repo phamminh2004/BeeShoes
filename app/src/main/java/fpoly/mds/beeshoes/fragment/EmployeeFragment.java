@@ -27,17 +27,15 @@ import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.adapter.EmployeeAdapter;
-import fpoly.mds.beeshoes.adapter.ShoesAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentEmployeeBinding;
 import fpoly.mds.beeshoes.model.Employee;
-import fpoly.mds.beeshoes.model.Shoe;
 
 public class EmployeeFragment extends Fragment implements EmployeeAdapter.functionInterface {
     FragmentEmployeeBinding binding;
     FirebaseFirestore db;
     EmployeeAdapter adapter;
-    ArrayList<Employee> list = new ArrayList<>();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    ArrayList<Employee> list;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private EmployeeAdapter.functionInterface functionInterface;
 
     @Override
@@ -46,6 +44,7 @@ public class EmployeeFragment extends Fragment implements EmployeeAdapter.functi
         binding = FragmentEmployeeBinding.inflate(inflater, container, false);
         db = FirebaseFirestore.getInstance();
         functionInterface = this;
+        list = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvEmployee.setLayoutManager(manager);
@@ -101,7 +100,7 @@ public class EmployeeFragment extends Fragment implements EmployeeAdapter.functi
         builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                db.collection("Employee").document(id).delete().addOnSuccessListener(command ->{
+                db.collection("Employee").document(id).delete().addOnSuccessListener(command -> {
                     Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
                     loadData();
                 });
