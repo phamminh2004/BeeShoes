@@ -1,6 +1,8 @@
 package fpoly.mds.beeshoes.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,10 @@ import java.util.ArrayList;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.adapter.BillAdapter;
+import fpoly.mds.beeshoes.adapter.EmployeeAdapter;
 import fpoly.mds.beeshoes.databinding.FragmentBillBinding;
 import fpoly.mds.beeshoes.model.Bill;
+import fpoly.mds.beeshoes.model.Employee;
 
 public class BillFragment extends Fragment implements BillAdapter.functionInterface {
 
@@ -52,6 +56,35 @@ public class BillFragment extends Fragment implements BillAdapter.functionInterf
         FirebaseUser currentUser = auth.getCurrentUser();
         userId = currentUser.getUid();
         loadData();
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<Bill> templist = new ArrayList<>();
+                try {
+                    if (s.toString().trim() != "") {
+                        for (Bill bill : list) {
+                            if (String.valueOf(bill.getId()).contains(String.valueOf(s))) {
+                                templist.add(bill);
+                            }
+                        }
+                        adapter = new BillAdapter(getContext(), templist, functionInterface);
+                        binding.rvBill.setAdapter(adapter);
+                    }
+                } catch (Exception e) {
+                    Log.e("TAG", "Lỗi tìm kiếm" + e.getMessage());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return binding.getRoot();
     }
 

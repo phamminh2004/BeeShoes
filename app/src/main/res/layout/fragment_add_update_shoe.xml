@@ -25,10 +25,11 @@
     <Spinner
         android:id="@+id/sp_shoeType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:paddingLeft="8dp"
         android:popupBackground="@android:color/white"
+        android:background="@drawable/border"
         android:scrollbars="none"
         android:spinnerMode="dropdown" />
 

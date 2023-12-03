@@ -41,7 +41,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Work work = list.get(position);
-        holder.binding.tvName.setText(work.getName());
+        holder.binding.tvName.setText("Nhân viên: "+work.getName());
         holder.binding.tvShift.setText("Ca: " + work.getShift());
         holder.binding.tvTimeStart.setText("Từ: " + dtf.format(work.getTimeStart()));
         holder.binding.tvTimeEnd.setText("Đến: " + dtf.format(work.getTimeEnd()));

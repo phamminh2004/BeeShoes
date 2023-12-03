@@ -46,7 +46,7 @@ public class HomeCustomerAdapter extends RecyclerView.Adapter<HomeCustomerAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Shoe item = list.get(position);
         holder.binding.tvName.setText(item.getName());
-        holder.binding.tvPrice.setText(decimalFormat.format(item.getPrice()) + "VND");
+        holder.binding.tvPrice.setText("đ" + decimalFormat.format(item.getPrice()));
         String img = item.getImg();
         try {
             Picasso.get().load(img).placeholder(R.drawable.ic_camera).error(R.drawable.ic_camera)

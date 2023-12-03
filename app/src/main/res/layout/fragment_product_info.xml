@@ -11,14 +11,15 @@
     <ImageView
         android:id="@+id/iv_img"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@drawable/bgr" />
+        android:scaleType="centerCrop"
+        android:layout_height="220dp" />
 
     <TextView
+        android:layout_marginTop="10dp"
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nike Air"
+        android:text="Nike"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -52,7 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Mô tả sản phẩm"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        android:layout_marginTop="10dp"
         android:textStyle="bold" />
 
     <TextView

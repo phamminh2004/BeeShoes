@@ -17,8 +17,7 @@
             android:id="@+id/iv_img"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bgr" />
+            android:scaleType="fitXY" />
     </androidx.cardview.widget.CardView>
 
 
@@ -28,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
         android:text="Nike Air Jordan"
+        android:textStyle="bold"
         android:textSize="20sp" />
 
     <TextView
@@ -35,9 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:text="1200000VND"
+        android:text="đ1200000"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="italic|bold" />
 
     <ImageButton
         android:id="@+id/btn_add"

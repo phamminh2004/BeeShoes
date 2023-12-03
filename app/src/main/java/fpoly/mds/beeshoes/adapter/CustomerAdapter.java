@@ -34,7 +34,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
         Customer customer = list.get(position);
         holder.binding.tvName.setText("Tên: " + customer.getName());
         holder.binding.tvPhone.setText("SĐT: " + customer.getPhone());
-        holder.binding.tvAddress.setText("Địa chỉ" + customer.getAddress());
+        holder.binding.tvAddress.setText("Địa chỉ: " + customer.getAddress());
     }
 
     @Override

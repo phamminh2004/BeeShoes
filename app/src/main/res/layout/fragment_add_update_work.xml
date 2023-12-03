@@ -9,6 +9,7 @@
     tools:context=".fragment.AddUpdateWorkFragment">
 
     <Spinner
+        android:background="@drawable/border"
         android:id="@+id/sp_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
