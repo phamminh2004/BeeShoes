@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -41,6 +45,17 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        FirebaseFirestore.getInstance().collection("User").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"manager".equals(role)) {
+                        holder.binding.btnFuncion.setVisibility(View.GONE);
+                    }
+                });
         Work work = list.get(position);
         holder.binding.tvName.setText("Nhân viên: " + work.getName());
         holder.binding.tvShift.setText("Ca: " + work.getShift());

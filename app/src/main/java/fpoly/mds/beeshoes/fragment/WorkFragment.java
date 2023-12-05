@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -51,6 +53,17 @@ public class WorkFragment extends Fragment implements WorkAdapter.functionInterf
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvWork.setLayoutManager(manager);
         loadData();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        db.collection("User").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"manager".equals(role)) {
+                        binding.btnAdd.setVisibility(View.GONE);
+                    }
+                });
         binding.btnAdd.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddUpdateWorkFragment()).addToBackStack(null).commit();
         });
@@ -156,5 +169,9 @@ public class WorkFragment extends Fragment implements WorkAdapter.functionInterf
         list = getAllList();
         adapter = new WorkAdapter(getContext(), list, functionInterface);
         binding.rvWork.setAdapter(adapter);
+    }
+    public void onResume() {
+        super.onResume();
+        loadData();
     }
 }

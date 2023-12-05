@@ -127,4 +127,10 @@ public class RevenueStatisticsFragment extends Fragment {
         binding.barChart.setFitBars(true);
         binding.barChart.invalidate();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
 }

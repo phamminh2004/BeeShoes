@@ -172,4 +172,8 @@ public class EmployeeFragment extends Fragment implements EmployeeAdapter.functi
         adapter = new EmployeeAdapter(getContext(), list, functionInterface);
         binding.rvEmployee.setAdapter(adapter);
     }
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 }

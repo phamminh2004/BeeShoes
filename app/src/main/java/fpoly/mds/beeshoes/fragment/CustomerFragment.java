@@ -111,4 +111,8 @@ public class CustomerFragment extends Fragment {
         adapter = new CustomerAdapter(getContext(), list);
         binding.rvCustomer.setAdapter(adapter);
     }
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 }

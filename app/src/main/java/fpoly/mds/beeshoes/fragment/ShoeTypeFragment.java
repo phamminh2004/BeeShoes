@@ -153,4 +153,8 @@ public class ShoeTypeFragment extends Fragment implements ShoeTypeAdapter.functi
         adapter = new ShoeTypeAdapter(getContext(), list, functionInterface);
         binding.rvShoeType.setAdapter(adapter);
     }
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 }

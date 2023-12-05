@@ -96,10 +96,10 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
         builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               db.collection("Shoes").document(id).delete().addOnSuccessListener(command ->{
-                   Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
-                   loadData();
-               });
+                db.collection("Shoes").document(id).delete().addOnSuccessListener(command -> {
+                    Toast.makeText(getContext(), "Xoá thành công", Toast.LENGTH_SHORT).show();
+                    loadData();
+                });
                 dialogInterface.dismiss();
             }
         });
@@ -146,8 +146,14 @@ public class ShoesFragment extends Fragment implements ShoesAdapter.functionInte
     }
 
     private void loadData() {
-            list = getAllList();
-            adapter = new ShoesAdapter(getContext(), list, functionInterface);
-            binding.rvShoes.setAdapter(adapter);
+        list = getAllList();
+        adapter = new ShoesAdapter(getContext(), list, functionInterface);
+        binding.rvShoes.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
     }
 }

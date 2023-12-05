@@ -194,4 +194,8 @@ public class HomeCustomerFragment extends Fragment implements HomeCustomerAdapte
             mTimer = null;
         }
     }
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 }
