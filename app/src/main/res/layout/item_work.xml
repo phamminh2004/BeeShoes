@@ -39,7 +39,7 @@
             android:layout_marginLeft="10dp"
             android:drawableLeft="@drawable/ic_circle"
             android:drawablePadding="5dp"
-            android:text="Thời gian bắt đầu: 7:00"
+            android:text="Từ: 7:00"
             android:textSize="20sp" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_marginLeft="10dp"
             android:drawableLeft="@drawable/ic_circle"
             android:drawablePadding="5dp"
-            android:text="Thời gian kết thúc: 9:00"
+            android:text="Đến: 9:00"
             android:textSize="20sp" />
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_marginLeft="10dp"
             android:drawableLeft="@drawable/ic_circle"
             android:drawablePadding="5dp"
-            android:text="Trạng thái: Hoạt động"
+            android:text="Hoạt động"
             android:textSize="22sp" />
     </LinearLayout>
 

@@ -3,6 +3,7 @@ package fpoly.mds.beeshoes.adapter;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -75,6 +76,21 @@ public class HomeCustomerAdapter extends RecyclerView.Adapter<HomeCustomerAdapte
                         Toast.makeText(context, "Thành công", Toast.LENGTH_SHORT).show();
                     });
         });
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        FirebaseFirestore.getInstance().collection("User").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        if (!documentSnapshot.getString("role").equals("customer"))
+                            holder.binding.btnAdd.setVisibility(View.GONE);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Error", "onFailure" + e);
+                });
     }
 
     @Override

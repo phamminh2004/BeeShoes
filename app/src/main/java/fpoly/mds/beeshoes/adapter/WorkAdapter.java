@@ -24,6 +24,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
     private final ArrayList<Work> list;
     private final functionInterface functionInterface;
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+    int status;
 
     public WorkAdapter(Context context, ArrayList<Work> list, functionInterface functionInterface) {
         this.context = context;
@@ -41,17 +42,20 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Work work = list.get(position);
-        holder.binding.tvName.setText("Nhân viên: "+work.getName());
+        holder.binding.tvName.setText("Nhân viên: " + work.getName());
         holder.binding.tvShift.setText("Ca: " + work.getShift());
         holder.binding.tvTimeStart.setText("Từ: " + dtf.format(work.getTimeStart()));
         holder.binding.tvTimeEnd.setText("Đến: " + dtf.format(work.getTimeEnd()));
-        if (work.getStatus() == 0) {
-            holder.binding.tvStatus.setText("Ngoài ca");
-            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
-        } else {
+
+        if (work.getStatus() == 1) {
             holder.binding.tvStatus.setText("Đang làm");
             holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
+
+        } else {
+            holder.binding.tvStatus.setText("Ngoài ca");
+            holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
         }
+
         holder.binding.btnFuncion.setOnClickListener(v -> {
             openDialogChucNang(work.getId());
         });

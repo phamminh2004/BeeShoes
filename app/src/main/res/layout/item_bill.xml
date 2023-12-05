@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="6"
             android:textStyle="bold"
-            android:text="Tên khách hàng: John"
+            android:text="Họ tên: "
             android:textSize="20sp" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="Giá: đ1,290,000"
+            android:text="Giá: "
             android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:text="SDT: 0988327648"
+            android:text="SDT: "
             android:textSize="16sp" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:text="Địa chỉ: Hà Nội"
+            android:text="Địa chỉ: "
             android:textSize="16sp" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:text="Ngày đặt hàng: 20-10-2023"
+            android:text="Ngày đặt hàng: "
             android:textSize="16sp" />
 
         <TextView
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:text="Trạng thái: Đã thanh toán"
+            android:text="Trạng thái: "
             android:textSize="16sp" />
 
     </LinearLayout>

@@ -1,113 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="30dp"
     tools:context=".fragment.AddUpdateShoeFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:endIconMode="clear_text">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="30dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_name"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên giày" />
+            app:endIconMode="clear_text">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tên giày" />
 
-    <Spinner
-        android:id="@+id/sp_shoeType"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="8dp"
-        android:popupBackground="@android:color/white"
-        android:background="@drawable/border"
-        android:scrollbars="none"
-        android:spinnerMode="dropdown" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:endIconMode="clear_text">
+        <Spinner
+            android:id="@+id/sp_shoeType"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/border"
+            android:paddingLeft="8dp"
+            android:popupBackground="@android:color/white"
+            android:scrollbars="none"
+            android:spinnerMode="dropdown" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_price"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Giá" />
+            app:endIconMode="clear_text">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Giá" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:endIconMode="clear_text">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_color"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Màu sắc" />
+            app:endIconMode="clear_text">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Màu sắc" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_size"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:endIconMode="clear_text">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_size"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Size" />
+            app:endIconMode="clear_text">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Size" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_describe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:endIconMode="clear_text">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_describe"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_describe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mô tả" />
+            app:endIconMode="clear_text">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mô tả" />
 
-    <ImageView
-        android:id="@+id/card_picker_camera"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:background="#FF5722"
-        android:scaleType="center"
-        android:src="@drawable/ic_camera" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/custom_button"
-        android:text="Hoàn tất"
-        android:textColor="@color/white" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/card_picker_camera"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="#FF5722"
+            android:scaleType="center"
+            android:src="@drawable/ic_camera" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/custom_button"
+            android:text="Hoàn tất"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</ScrollView>
 

@@ -51,7 +51,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         holder.binding.tvNameCustomer.setText("Họ tên: " + item.getNameCustomer());
         holder.binding.tvAddress.setText("Địa chỉ: " + item.getAddress());
         holder.binding.tvPhone.setText("SĐT: " + item.getPhone());
-        holder.binding.tvDate.setText("Ngày đặt: " + sdf.format(item.getDate()));
+        holder.binding.tvDate.setText("Ngày đặt hàng: " + sdf.format(item.getDate()));
         try {
             Date currentDate = new Date();
             Calendar cal = Calendar.getInstance();
