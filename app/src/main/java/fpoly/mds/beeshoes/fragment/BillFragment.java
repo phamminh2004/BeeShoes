@@ -163,7 +163,7 @@ public class BillFragment extends Fragment implements BillAdapter.functionInterf
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         role = documentSnapshot.getString("role");
-                        if (role.equals("manager")) {
+                        if (role.equals("manager")||role.equals("employee")) {
                             getAllList(new FirestoreCallback() {
                                 @Override
                                 public void onCallback(ArrayList<Bill> list) {

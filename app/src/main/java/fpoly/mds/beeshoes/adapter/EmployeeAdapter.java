@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.DialogFunctionBinding;
 import fpoly.mds.beeshoes.databinding.ItemEmployeeBinding;
+import fpoly.mds.beeshoes.fragment.BillFragment;
+import fpoly.mds.beeshoes.model.Bill;
 import fpoly.mds.beeshoes.model.Employee;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
@@ -42,6 +47,17 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        FirebaseFirestore.getInstance().collection("User").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"manager".equals(role)) {
+                        holder.binding.btnFuncion.setVisibility(View.GONE);
+                    }
+                });
         Employee item = list.get(position);
         holder.binding.tvName.setText(item.getName());
         holder.binding.tvBirthday.setText("Ngày sinh: " + sdf.format(item.getBirthday()));
@@ -88,6 +104,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                 dialog.dismiss();
             }
         });
+    }
+
+    private void getList(BillFragment.FirestoreCallback callback) {
+        ArrayList<Bill> list = new ArrayList<>();
+
     }
 
     public interface functionInterface {

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -49,6 +51,17 @@ public class EmployeeFragment extends Fragment implements EmployeeAdapter.functi
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvEmployee.setLayoutManager(manager);
         loadData();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
+        db.collection("User").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String role = documentSnapshot.getString("role");
+                    if (!"manager".equals(role)) {
+                        binding.btnAdd.setVisibility(View.GONE);
+                    }
+                });
         binding.btnAdd.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new AddUpdateEmployeeFragment()).addToBackStack(null).commit();
         });
