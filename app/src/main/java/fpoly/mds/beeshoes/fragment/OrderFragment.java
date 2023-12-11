@@ -100,7 +100,7 @@ public class OrderFragment extends Fragment {
     }
 
     private void upLoadCustomer() {
-        Customer customer = new Customer(userId, nameCustomer, address, phone);
+        Customer customer = new Customer(userId, nameCustomer, phone, address);
         HashMap<String, Object> hashMap = customer.converHashMap();
         db.collection("Customer").document(userId).set(hashMap).
                 addOnSuccessListener(new OnSuccessListener<Void>() {

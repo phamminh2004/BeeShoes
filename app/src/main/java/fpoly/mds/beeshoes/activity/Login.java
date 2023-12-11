@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(this, "Tài khoản hoặc mật khẩu sai", Toast.LENGTH_SHORT).show();
+                            binding.loadingProgressBar.setVisibility(View.GONE);
                         }
                     });
         }
