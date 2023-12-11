@@ -53,7 +53,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart cart = list.get(position);
         String id = cart.getId();
-        quantity = cart.getQuantity();
         holder.binding.tvName.setText(cart.getName());
         holder.binding.tvPrice.setText("đ" + decimalFormat.format(cart.getPrice()));
         holder.binding.tvColor.setText(cart.getColor());
@@ -68,6 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
 
         holder.binding.ivMinus.setOnClickListener(v -> {
+            quantity = cart.getQuantity();
             if (quantity > 1) {
                 getName(cart.getName(), new ShoeCallback() {
                     @Override
@@ -88,6 +88,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         });
         holder.binding.ivPlus.setOnClickListener(v -> {
+            quantity = cart.getQuantity();
             getName(cart.getName(), new ShoeCallback() {
                 @Override
                 public void onShoeLoaded(Shoe shoe) {
