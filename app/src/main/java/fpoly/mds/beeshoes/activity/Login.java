@@ -21,7 +21,6 @@ public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
     FirebaseFirestore database;
     FirebaseAuth auth;
-    private ProgressBar loadingProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

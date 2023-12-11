@@ -140,11 +140,14 @@ public class AddUpdateWorkFragment extends Fragment {
     }
 
     private void saveData() {
+        binding.loadingProgressBar.setVisibility(View.VISIBLE);
         if (bundle == null) {
             id = UUID.randomUUID().toString();
             uploadFirestoreData();
+            binding.loadingProgressBar.setVisibility(View.GONE);
         } else {
             uploadFirestoreData();
+            binding.loadingProgressBar.setVisibility(View.GONE);
         }
     }
 

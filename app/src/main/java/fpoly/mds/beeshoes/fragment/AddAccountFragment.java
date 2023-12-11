@@ -60,6 +60,7 @@ public class AddAccountFragment extends Fragment {
             binding.edtRePassword.setError("Mật khẩu không trùng khớp");
             binding.edtRePassword.requestFocus();
         } else {
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     User user1 = new User(email, "employee");
@@ -73,8 +74,10 @@ public class AddAccountFragment extends Fragment {
                     binding.edtEmail.setText("");
                     binding.edtPassword.setText("");
                     binding.edtRePassword.setText("");
+                    binding.loadingProgressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(getContext(), "Tạo tài khoản thất bại", Toast.LENGTH_SHORT).show();
+                    binding.loadingProgressBar.setVisibility(View.GONE);
                 }
             });
         }

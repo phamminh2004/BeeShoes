@@ -42,5 +42,12 @@
         android:background="@drawable/custom_button"
         android:text="Hoàn tất"
         android:textColor="@color/white" />
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </LinearLayout>
 

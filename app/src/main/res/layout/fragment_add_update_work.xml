@@ -9,11 +9,11 @@
     tools:context=".fragment.AddUpdateWorkFragment">
 
     <Spinner
-        android:background="@drawable/border"
         android:id="@+id/sp_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
+        android:background="@drawable/border"
         android:paddingLeft="8dp"
         android:popupBackground="@android:color/white"
         android:scrollbars="none"
@@ -71,5 +71,12 @@
         android:background="@drawable/custom_button"
         android:text="Hoàn tất"
         android:textColor="@color/white" />
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </LinearLayout>
 

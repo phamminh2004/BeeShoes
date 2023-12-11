@@ -53,6 +53,7 @@ public class ChangePasswordFragment extends Fragment {
             binding.edtRePassword.setError("Mật khẩu không trùng khớp");
             binding.edtRePassword.requestFocus();
         } else{
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
             AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
             user.reauthenticate(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
@@ -62,8 +63,10 @@ public class ChangePasswordFragment extends Fragment {
                             binding.edtCurrentPassword.setText("");
                             binding.edtNewPassword.setText("");
                             binding.edtRePassword.setText("");
+                            binding.loadingProgressBar.setVisibility(View.GONE);
                         }else{
                             Toast.makeText(getContext(), "Cập nhật mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                            binding.loadingProgressBar.setVisibility(View.GONE);
                         }
                     });
                 }else{

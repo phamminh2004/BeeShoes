@@ -23,7 +23,6 @@ public class Register extends AppCompatActivity {
     FirebaseFirestore database;
     FirebaseAuth auth;
     String REGEX_EMAIL = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-    private ProgressBar loadingProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +72,11 @@ public class Register extends AppCompatActivity {
                         }
                     });
                     startActivity(new Intent(Register.this, Login.class));
-                    binding.loadingProgressBar.setVisibility(View.GONE);
                     Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
+                    binding.loadingProgressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
+                    binding.loadingProgressBar.setVisibility(View.GONE);
                 }
             });
         }
