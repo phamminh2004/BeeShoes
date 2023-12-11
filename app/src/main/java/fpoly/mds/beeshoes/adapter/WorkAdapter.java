@@ -11,12 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fpoly.mds.beeshoes.R;
 import fpoly.mds.beeshoes.databinding.DialogFunctionBinding;
@@ -62,15 +66,22 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
         holder.binding.tvTimeStart.setText("Từ: " + dtf.format(work.getTimeStart()));
         holder.binding.tvTimeEnd.setText("Đến: " + dtf.format(work.getTimeEnd()));
 
-        if (work.getStatus() == 1) {
-            holder.binding.tvStatus.setText("Đang làm");
+        TemporalAccessor tempS = dtf.parse(work.getTimeStart().toString());
+        LocalTime timeStart = LocalTime.from(tempS);
+        TemporalAccessor tempE = dtf.parse(work.getTimeEnd().toString());
+        LocalTime timeEnd = LocalTime.from(tempE);
+        LocalTime localTimeNow = LocalTime.now();
+        if (timeStart.isBefore(localTimeNow) && timeEnd.isAfter(localTimeNow)) {
+            status = 1;
+            holder.binding.tvStatus.setText("Trong ca");
             holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.green));
-
+            updateStatus(work.getId());
         } else {
+            status = 0;
             holder.binding.tvStatus.setText("Ngoài ca");
             holder.binding.tvStatus.setTextColor(ContextCompat.getColor(context, R.color.red));
+            updateStatus(work.getId());
         }
-
         holder.binding.btnFuncion.setOnClickListener(v -> {
             openDialogChucNang(work.getId());
         });
@@ -101,6 +112,16 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder> {
             public void onClick(View v) {
                 functionInterface.delete(id);
                 dialog.dismiss();
+            }
+        });
+    }
+
+    private void updateStatus(String id) {
+        HashMap<String, Object> updateData = new HashMap<>();
+        updateData.put("status", status);
+        FirebaseFirestore.getInstance().collection("Work").document(id).update(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
             }
         });
     }
