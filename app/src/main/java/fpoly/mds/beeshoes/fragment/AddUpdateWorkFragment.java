@@ -97,6 +97,7 @@ public class AddUpdateWorkFragment extends Fragment {
             } else if (!shift.matches(REGEX_INT)) {
                 Toast.makeText(getContext(), "Ca là số tự nhiên", Toast.LENGTH_SHORT).show();
             } else {
+                binding.loadingProgressBar.setVisibility(View.VISIBLE);
                 saveData();
             }
         });
@@ -140,14 +141,11 @@ public class AddUpdateWorkFragment extends Fragment {
     }
 
     private void saveData() {
-        binding.loadingProgressBar.setVisibility(View.VISIBLE);
         if (bundle == null) {
             id = UUID.randomUUID().toString();
             uploadFirestoreData();
-            binding.loadingProgressBar.setVisibility(View.GONE);
         } else {
             uploadFirestoreData();
-            binding.loadingProgressBar.setVisibility(View.GONE);
         }
     }
 

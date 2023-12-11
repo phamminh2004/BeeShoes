@@ -138,6 +138,7 @@ public class AddUpdateEmployeeFragment extends Fragment {
             } else if (!birthday.matches(REGEX_DATE)) {
                 Toast.makeText(getContext(), "Ngày sinh sai định dạng (dd-MM-yyyy)", Toast.LENGTH_SHORT).show();
             } else {
+                binding.loadingProgressBar.setVisibility(View.VISIBLE);
                 saveData();
             }
         });
@@ -175,23 +176,18 @@ public class AddUpdateEmployeeFragment extends Fragment {
     }
 
     private void saveData() {
-        binding.loadingProgressBar.setVisibility(View.VISIBLE);
         if (bundle == null) {
             if (img_uri == null) {
                 Toast.makeText(getContext(), "Bạn chưa chọn ảnh", Toast.LENGTH_SHORT).show();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 id = UUID.randomUUID().toString();
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         } else {
             if (img_uri != null) {
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 updateDataWithoutImage();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         }
     }

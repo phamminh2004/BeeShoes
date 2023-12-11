@@ -104,6 +104,7 @@ public class AddUpdateShoeTypeFragment extends Fragment {
                 binding.edtName.setError("Nhập loại giày");
                 binding.edtName.requestFocus();
             } else {
+                binding.loadingProgressBar.setVisibility(View.VISIBLE);
                 saveData();
             }
         });
@@ -141,23 +142,18 @@ public class AddUpdateShoeTypeFragment extends Fragment {
     }
 
     private void saveData() {
-        binding.loadingProgressBar.setVisibility(View.VISIBLE);
         if (bundle == null) {
             if (img_uri == null) {
                 Toast.makeText(getContext(), "Bạn chưa chọn ảnh", Toast.LENGTH_SHORT).show();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 id = UUID.randomUUID().toString();
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         } else {
             if (img_uri != null) {
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 updateDataWithoutImage();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         }
     }

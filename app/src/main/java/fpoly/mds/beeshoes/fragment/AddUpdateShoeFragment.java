@@ -140,6 +140,7 @@ public class AddUpdateShoeFragment extends Fragment {
             } else if (!strPrice.matches(REGEX_INT) || !strSize.matches(REGEX_INT)) {
                 Toast.makeText(getContext(), "Giá và size là số tự nhiên", Toast.LENGTH_SHORT).show();
             } else {
+                binding.loadingProgressBar.setVisibility(View.VISIBLE);
                 saveData();
             }
         });
@@ -177,23 +178,18 @@ public class AddUpdateShoeFragment extends Fragment {
     }
 
     private void saveData() {
-        binding.loadingProgressBar.setVisibility(View.VISIBLE);
         if (bundle == null) {
             if (img_uri == null) {
                 Toast.makeText(getContext(), "Bạn chưa chọn ảnh", Toast.LENGTH_SHORT).show();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 id = UUID.randomUUID().toString();
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         } else {
             if (img_uri != null) {
                 uploadImageAndSaveData();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             } else {
                 updateDataWithoutImage();
-                binding.loadingProgressBar.setVisibility(View.GONE);
             }
         }
     }
@@ -275,6 +271,7 @@ public class AddUpdateShoeFragment extends Fragment {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
                                 String name = document.getString("name");
                                 listName.add(name);
+                                Log.e("name",listName.toString());
                             }
                             adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, listName);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
