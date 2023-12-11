@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class OrderFragment extends Fragment {
     int price, totalPrice;
     String nameCustomer, address, phone, id, userId;
     Date currentDate;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +65,7 @@ public class OrderFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         binding.rvProduct.setLayoutManager(manager);
+        binding.tvDate.setText("Nhận hàng vào " + sdf.format(new Date()));
         loadData();
         binding.tvSubmit.setOnClickListener(v -> {
             nameCustomer = binding.edtNameCustomer.getText().toString();
